@@ -1,0 +1,87 @@
+<form [formGroup] = "blogForm" class="blog-editor ms-3 me-3">
+  <div class="title">
+    <label class="col-form-label col-form-label-lg mt-4" for="inputLarge">Write the blog title*</label>
+    <input class="form-control form-control-lg" type="text" id="title" formControlName="title">
+  </div>
+   <div class="selects">
+    <div class="destination flex-grow-1">
+      <label for="destinationSelect" class="col-form-label-sm mt-4">Select destination*</label>
+      <select class="form-select" id="destinationSelect" formControlName="destination">
+        <option></option>
+        @for(destination of destinations; track destination){
+        <option>{{destination}}</option>
+        }
+      </select>
+    </div>
+    <div class="date flex-grow-1">
+      <label for="dateSelect" class="col-form-label-sm mt-4">Select date*</label>
+      <select class="form-select" id="monthSelect" formControlName="month">
+        <option></option>
+        @for(month of months; track month){
+        <option>{{month}}</option>
+        }
+      </select>
+      <select class="form-select" id="yearSelect" formControlName="year">
+        <option></option>
+        @for(year of years; track year){
+        <option>{{year}}</option>
+        }  
+      </select>
+    </div>
+     <div class="date flex-grow-1">
+      <label for="dateSelect" class="col-form-label-sm mt-4">Select number of days</label>
+      <select class="form-select" id="nDaysSelect" formControlName="nDays">
+        <option></option>
+        @for(day of days; track day){
+        <option>{{day}}</option>
+        }
+      </select>
+    </div>
+    <div class="travelers flex-grow-1">
+      <label for="travelersSelect" class="col-form-label-sm mt-4">Select number of travelers*</label>
+      <select class="form-select" id="adultsSelect" formControlName="travelers">
+        <option></option>
+        @for(traveler of travelers; track traveler){
+        <option>{{traveler}}</option>
+        }
+      </select>      
+    </div>
+    <div class="country flex-grow-1">
+      <label class="col-form-label col-form-label-sm mt-4" for="inputSmall">Write country name*</label>
+      <input class="form-control form-control-sm" type="text" id="country" formControlName="country">
+    </div>
+    <div class="city flex-grow-1">
+      <label class="col-form-label col-form-label-sm mt-4" for="inputSmall">Write city name*</label>
+      <input class="form-control form-control-sm" type="text" id="city" formControlName="city">
+    </div>
+  </div>
+  <div class="textarea">
+      <label for="textarea" class="form-label mt-4">Write about your advanture</label>
+      <textarea class="form-control" id="free-format-text" rows="5" placeholder="Ex.g.: Start with important Fact/TIPS (write here the info travellers should know before to go to the destination): 
+          weather conditions in the period of your stay;
+          language experience;
+          currency exchange;
+          internet/wi-fi availability;
+          anything else important you think should be stated here." formControlName="description"></textarea>
+    </div>
+
+    <div class="photos">
+      <label for="blogPhoto" class="form-label mt-4 me-3">Add your photos:</label>
+      <button class="btn btn-secondary btn-sm me-3" type="button" (click)="fileInput.click()">Pick the files</button>
+      @if(imageData) {
+        <img [src]="imageData" alt="" height="200">
+      }
+      <button class="btn btn-dark btn-sm me-2" type="button" >Upload</button>
+      <input 
+        style="display: none;"
+        #fileInput
+        class="form-control" 
+        type="file" 
+        (change)="onFileSelected($event)" 
+        multiple id="blogPhoto">
+    </div>
+
+    <div class="buttons d-flex justify-content-start mt-4">
+      <button class="btn btn-info me-2" type="submit">Add daily adventure plan</button>
+    </div>
+</form>
