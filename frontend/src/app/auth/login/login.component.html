@@ -1,0 +1,73 @@
+@if(loggedIn !== true){
+  <button type="button" class="btn btn-secondary my-2 my-sm-0 ms-2" 
+  (click)="openModal()">Login</button>          
+} 
+@if(loggedIn == true){
+  <app-usermenu></app-usermenu>
+  <!-- перенести эту кнопку в app-usermenu -->
+   <button type="button" class="btn text-light my-2 my-sm-0 ms-2" (click)="logOut()">Logout</button>
+}
+<div class="modal" [style]="{'display': modalOpen() ? 'block': 'none'}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-group" [formGroup]="form">
+          <p>Please enter your e-mail and password to log in.</p>
+          <p>Please Sign in ig you don't have the profile yet.</p>
+          <div>
+            <label for="email" class="form-label mt-4">Email address</label>
+            <input type="email" class="form-control" id="email" 
+             aria-describedby="emailHelp" placeholder="Enter email" formControlName="email">
+              @if(form.controls['email'].touched){
+              @if(form.controls['email'].errors?.['required']){
+              <p class="validations">This field is required.</p>
+              } @if(form.controls['email'].errors?.['email']){
+              <p class="validations">Enter your e-mail correctly.</p>
+              } } 
+          </div>
+          <div>
+            <label for="password" class="form-label mt-4">Password</label>
+            <input type="password" class="form-control" id="password" 
+              placeholder="Password" autocomplete="off" formControlName="password">
+              @if(form.controls['password'].touched){
+              @if(form.controls['password'].errors?.['required']){
+              <p class="validations">This field is required.</p>
+              } @if(form.controls['password'].errors?.['pattern']){
+              <p class="validations">Only numbers are allowed.</p>
+              } @if(form.controls['password'].errors?.['minlength']){
+              <p class="validations">Minimum 5 numbers.</p>
+              } }
+          </div>
+          @if(signInOpen == true){
+          <div>
+            <label for="username" class="form-label mt-4">Password</label>
+            <input type="password" class="form-control" id="username" 
+              placeholder="Username" autocomplete="off" formControlName="username">              
+          </div>
+          }      
+        </form>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+      @if(signInOpen !== true){
+        <div class="sign-in">
+          <button type="button" class="btn btn-primary" (click)="signIn()">Sign in</button>
+        </div>
+        <div class="log-in">
+          <button type="button" class="btn btn-primary me-2" (click)="logIn()">Log in</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        </div>
+      } @else {
+        <button type="button" class="btn btn-primary me-2" (click)="registerUser()">Register</button>
+      }
+
+      </div>
+    </div>
+  </div>
+</div>
+
