@@ -1,0 +1,60 @@
+@if(loggedIn() !== true){
+  <div class="login-btn me-2">
+    <button type="button" class="btn btn-secondary my-2 my-sm-0 ms-2" 
+    test-id="login-button"
+    (click)="openModal()">Login</button>    
+  </div>      
+} 
+@if(loggedIn() == true){
+  <app-usermenu></app-usermenu>
+}
+<div class="modal" [style]="{'display': modalOpen() ? 'block': 'none'}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">TravelTips</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      @if(signInOpen() !== true){ 
+      <div class="modal-body">   
+        <form class="form-group" [formGroup]="form" #loginForm>
+          <p>Please enter your e-mail and password to log in.</p>
+          <div>
+            <label for="email" class="form-label mt-2">Email address</label>
+            <input type="email" class="form-control" id="email" 
+             aria-describedby="emailHelp" placeholder="Enter email" formControlName="email">
+              <app-validations [control]="form.get('email')" />
+              @if(form.controls['email'].errors?.['email']){
+              <p class="validations">Enter your e-mail correctly.</p>
+              }  
+          </div>
+          <div>
+            <label for="password" class="form-label mt-4">Password</label>
+            <input type="password" class="form-control" id="password" 
+              placeholder="Password" autocomplete="off" formControlName="password">
+              <app-validations [control]="form.get('password')" />
+              @if(form.controls['password'].errors?.['minlength']){
+              <p class="validations">Minimum 5 numbers.</p>
+              } 
+          </div>      
+        </form>
+      </div>     
+      <div class="modal-footer d-flex justify-content-between align-items-end">
+        <div class="sign-in">
+          <p>Please Sign in ig you don't have the profile yet.</p>
+          <button type="button" class="btn btn-primary" (click)="signIn()">Sign in</button>
+        </div>
+        <div class="log-in">
+          <button type="button" class="btn btn-primary me-2" (click)="logIn()">Log in</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        </div>
+      </div>
+    }@else{
+      <app-registration [(signInOpen)] ="signInOpen"></app-registration>
+    }    
+    </div>
+  </div>
+</div>
+
