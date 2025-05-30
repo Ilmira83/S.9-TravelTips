@@ -1,5 +1,6 @@
-.blog-editor{
+.plan-editor{
   display: grid;
+
 }
 .selects{
   display: flex;
@@ -13,10 +14,11 @@
   color: #6c757d; 
   opacity: 1;    
 }
-
+  
 #free-format-text {
   max-height: 50vh; 
   overflow-y: auto;
   resize: vertical;
   min-height: 100px; 
 }
+
