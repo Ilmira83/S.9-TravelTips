@@ -48,6 +48,8 @@ export class PlanEditorComponent {
       next: (plan) => {
         this.planID.set(plan.id!);
         this.addDailyPlan();
+        this.toastrservice.info(`Plan ${plan.title} was  created.`,
+        'Info', { closeButton: true, positionClass: 'toast-bottom-right' } );
         this.planService.plansList.reload();
         this.router.navigate(['app-plan-list']);
       },
@@ -75,6 +77,8 @@ export class PlanEditorComponent {
     this.planService.updatePlan(this.planID()!, planData).subscribe({
       next: () => {
         this.updateDailyPlansByPlanID();
+        this.toastrservice.info(`Plan ${planData.title} was  updated.`,
+        'Info', { closeButton: true, positionClass: 'toast-bottom-right' } );
         this.planService.plansList.reload();
         this.router.navigate(['app-plan-list']);
         this.planForm.resetForm();
