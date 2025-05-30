@@ -50,10 +50,13 @@
   <!-- Blogs list -->
 <div class="col-md-9">
   <div class="blog-list px-md-5 mt-3">
-    <div class="title text text-center"><h4>Your blogs</h4></div>
+    <div class="title text text-center"
+      routerLink="/app-blogs-list"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"><h4>Recent blogs</h4></div>
       <hr class="profile-divider">  
     @if(userBloglist().length){
-  <table class="table table-hover mt-3 me-3 mb-5">
+  <table class="table table-hover mt-3 me-3 mb-2">
     <thead>
       <tr>
         <th scope="col">Title</th>
@@ -61,7 +64,7 @@
       </tr>
     </thead>
     <tbody>  
-      @for(blog of userBloglist(); track blog.id){
+      @for(blog of userBloglist().slice(0, 4); track blog.id){
       <tr class="table-primary">
         <th scope="row" (click)="navigateToBlogDetails(blog.id!)">{{blog.title}}</th>
         <td class="period w-50">
@@ -72,14 +75,22 @@
       </tbody>
   </table>
     }@else {
-      <div class="error ms-3 mt-3">
-        <h4>You have no blogs yet. Start sharing your experience by creating a new blog post.</h4>
+      <div class="error ms-3 mt-3 mb-3">
+        <h4 class="fs-5">You have no blogs yet. Start sharing your experience by creating a new blog post.</h4>
       </div>
     }
-  </div>
+    <button class="btn btn-primary btn-sm my-2 my-sm-0" type="button"
+      routerLink="/app-blog-editor"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+      >Add new blog</button>
+    </div> 
   <!-- Plans list -->
-   <div class="blog-list px-md-5 mt-5">
-    <div class="title text text-center"><h4>Your plans</h4></div>
+   <div class="blog-list px-md-5">
+    <div class="title text text-center"
+      routerLink="/app-plan-list"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"><h4>Recent plans</h4></div>
       <hr class="profile-divider">   
     @if(userPlanlist().length){
   <table class="table table-hover mt-3 me-3">
@@ -90,7 +101,7 @@
       </tr>
     </thead>
     <tbody>  
-      @for(plan of userPlanlist(); track plan.id){
+      @for(plan of userPlanlist().slice(0, 4); track plan.id){
       <tr class="table-dark">
         <th scope="row" (click)="navigateToPlanDetails(plan.id!)">{{plan.title}}</th>
         <td class="period w-50">
@@ -101,12 +112,17 @@
       </tbody>
   </table>
     }@else {
-      <div class="error ms-3 mt-3">
-        <h4>You have no plans yet. Start planning your next adventure!</h4>
+      <div class="error ms-3 mt-3 mb-3">
+        <h4 class="fs-5">You have no plans yet. Start planning your next adventure!</h4>
       </div>
     }
+    <button class="btn btn-secondary btn-sm mt-2 my-sm-0" type="button"
+      routerLink="/app-plan-editor"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+      >Add new plan</button>
   </div>
 </div>
-
+ </div>
 
 

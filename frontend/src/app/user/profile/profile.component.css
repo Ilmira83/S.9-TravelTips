@@ -18,6 +18,7 @@
 
 th,
 a,
+.title,
 .icon-hover:hover{
   cursor: pointer;
 }
