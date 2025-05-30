@@ -1,0 +1,46 @@
+<div class="container">
+  <ol class="breadcrumb">
+    @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+      <li class="breadcrumb-item" [class.active]="last">
+        @if (!last) {
+          <a [routerLink]="crumb.url">{{ crumb.label }}</a>
+        } @else {
+          {{ crumb.label }}
+        }
+      </li>
+    }
+  </ol>
+  <section class="container blog-details">
+    <header class="w-100">
+      <div class="title">
+        <h3>{{selectedPlan()?.title}}</h3>
+      </div> 
+      <div class="destination d-flex gap-3">
+        <div class="region mb-3 fw-bold">{{selectedPlan()?.destination}}</div>
+        <div class="country-city mb-3">{{selectedPlan()?.country}}, {{selectedPlan()?.city}}</div>
+      </div>
+      <div class="period d-flex gap-3">
+        <div class="period mb-3">{{selectedPlan()?.month}}, {{selectedPlan()?.year}}</div>
+        <div class="nTravelers mb-3">{{selectedPlan()?.travelers}} travelers</div>
+      </div>
+    </header>
+    <div class="section-divider"></div>
+    <main>
+      <div class="description mb-3">{{selectedPlan()?.description}}</div>
+    </main>
+      <section class="daily-plan">
+        <app-daily-plan [(selectedPlan)]="selectedPlan"></app-daily-plan>
+      </section>
+    <footer>
+        <div class="card-btn d-flex justify-content-center align-items-end mt-5 mb-5">
+          <button type="button" class="btn btn-dark btn-sm me-3">
+           Share this plan</button>
+          <button type="button" class="btn btn-primary btn-sm"
+          routerLink="/app-plan-list"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"          
+          >Close</button>
+        </div>
+    </footer>
+  </section>
+</div>

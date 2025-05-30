@@ -1,0 +1,73 @@
+ <div class="container mt-2">
+  <div class="nav d-flex justify-content-between">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/app-profile', userId()]">My profile</a></li>
+        <li class="breadcrumb-item active">My plans</li>
+      </ol>
+      <div class="nav-buttons d-flex align-items-center">
+        <form class="d-flex">
+          <input class="form-control form-control-sm me-sm-2" type="search" placeholder="Search in plans..."
+            [ngModel]="blogsUtils.searchCriteria()" 
+            (ngModelChange)="blogsUtils.searchCriteria.set($event)" 
+            name="search">
+        </form>
+        <button class="btn btn-secondary dropdown-toggle btn-sm my-2 me-2 my-sm-0" type="button" data-bs-toggle="dropdown"
+        >Filter</button>
+        <ul class="dropdown-menu">
+      @for(destination of blogsUtils.destinations; track destination){   
+        @if(destination !== '') {
+          <li><a class="dropdown-item" (click)="filetredByDestination(destination)">{{destination}}</a></li> 
+        } @else {
+          <li><a class="dropdown-item" (click)="filetredByDestination(destination)">Show all</a></li>
+        }           
+      }
+    </ul>
+        <button class="btn btn-primary btn-sm my-2 my-sm-0" type="button"
+          routerLink="/app-plan-editor"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          (click)="resetCurrentID()">Add new plan</button>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-end mt-2">
+      <div class="header ms-3 mb-0">
+        <h4 class="mb-0">Your plans list</h4> 
+      </div>    
+    </div>
+  @if(userPlanlist().length){
+  <table class="table table-hover mt-3 ms-1">
+    <thead>
+      <tr>
+        <th class="ps-3" scope="col">Title</th>
+        <th scope="col">Date</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>  
+      @for(plan of userPlanlist(); track plan.id){
+      <tr class="table-primary">
+        <th class="ps-3" scope="row" (click)="navigateToBlogDetails(plan.id!)">{{plan.title}}</th>
+        <th scope="row" (click)="navigateToBlogDetails(plan.id!)">{{plan.month}}, {{plan.year}}</th>
+        <th class="modify_buttons text-center">
+          <button type="button" class="btn btn-outline-light btn-sm"
+          (click)="getPlanByID(plan.id!)"
+          >Edit</button>
+          <button type="button" class="btn btn-secondary btn-sm ms-2"
+          (click)="deletePlan(plan.id!)"
+          >Delete</button>
+        </th>
+      </tr>
+    } 
+      </tbody>
+  </table>
+    } @else if (userPlanlist().length !== 0 && (search() || blogsUtils.destinations)){
+      <div class="error ms-3 mt-3">
+        <h4>No plans with this criteria.</h4>
+      </div>
+    }@else {
+      <div class="error ms-3 mt-3">
+        <h4>No plans yet.</h4>
+      </div>
+    }
+
+ </div>
