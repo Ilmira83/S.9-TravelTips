@@ -65,6 +65,8 @@ export class BlogEditorComponent {
       next: (createdBlog) => {
         this.blogID.set(createdBlog.id!);
         this.addDailyPlan();
+        this.toastrservice.info(`Blog ${createdBlog.title} was  created.`,
+        'Info', { closeButton: true, positionClass: 'toast-bottom-right' } );
         this.blogsService.blogsList.reload();
         this.router.navigate(['app-blogs-list'])
       }
@@ -121,7 +123,9 @@ export class BlogEditorComponent {
     }
     this.blogsService.updateBlog(this.blogID()!, blog).subscribe({
       next: () => {  
-        this.updateDailyPlansByBlogID();    
+        this.updateDailyPlansByBlogID();  
+        this.toastrservice.info(`Blog ${blog.title} was  updated.`,
+        'Info', { closeButton: true, positionClass: 'toast-bottom-right' } );  
         this.blogsService.blogsList.reload();        
         this.router.navigate(['/app-blogs-list'])
         this.blogForm.resetForm()
