@@ -1,0 +1,112 @@
+<div class="container-fluid ps-0">
+  <div class="row ">
+    <div class="col-md-3 mb-4 mb-md-0">
+      @if(currentUser()){
+      <div class="card rounded-0 border-top-0">
+        <div class="card-body text-center mt-3">
+          <img [src]="currentUser()?.userPhoto" class="profile-photo" alt="">
+          <h5 class="card-title mt-3">{{currentUser()?.username}}</h5>          
+          <hr class="profile-divider">          
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active text-primary" 
+                routerLink="/app-blogs-list"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                test-id= "my-router-link">
+                My Blogs
+              </a>
+              <a class="nav-link text-primary" 
+                routerLink="/app-plan-list"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                test-id= "my-router-link">
+                My Plans
+              </a>
+            </li>
+          </ul>
+        </div>
+          <div class="card-footer mb-2 text-center">
+            <div class="dropdown-center ms-3">
+              <a class="dropdown-toggle text-primary" data-bs-toggle="dropdown" role="button">Settings</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item">Edit profile</a></li>
+                <li><a class="dropdown-item"
+                  (click)="deleteAccount(currentUser()!.id!)"
+                  >Delete profile</a></li>
+              </ul>
+            </div>
+              <a class="nav-link text-primary mt-2" (click)="logOut()">
+                Logout
+              </a>
+        </div>
+      </div>
+      }@else {
+      <div class="userError ms-3 mt-3">
+        <h4>User not found.</h4>
+      </div>
+      }
+  </div>
+  <!-- Blogs list -->
+<div class="col-md-9">
+  <div class="blog-list px-md-5 mt-3">
+    <div class="title text text-center"><h4>Your blogs</h4></div>
+      <hr class="profile-divider">  
+    @if(userBloglist().length){
+  <table class="table table-hover mt-3 me-3 mb-5">
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+    <tbody>  
+      @for(blog of userBloglist(); track blog.id){
+      <tr class="table-primary">
+        <th scope="row" (click)="navigateToBlogDetails(blog.id!)">{{blog.title}}</th>
+        <td class="period w-50">
+         {{blog.month}}, {{blog.year}}
+        </td>
+      </tr>
+    } 
+      </tbody>
+  </table>
+    }@else {
+      <div class="error ms-3 mt-3">
+        <h4>You have no blogs yet. Start sharing your experience by creating a new blog post.</h4>
+      </div>
+    }
+  </div>
+  <!-- Plans list -->
+   <div class="blog-list px-md-5 mt-5">
+    <div class="title text text-center"><h4>Your plans</h4></div>
+      <hr class="profile-divider">   
+    @if(userPlanlist().length){
+  <table class="table table-hover mt-3 me-3">
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+    <tbody>  
+      @for(plan of userPlanlist(); track plan.id){
+      <tr class="table-dark">
+        <th scope="row" (click)="navigateToPlanDetails(plan.id!)">{{plan.title}}</th>
+        <td class="period w-50">
+         {{plan.month}}, {{plan.year}}
+        </td>
+      </tr>
+    } 
+      </tbody>
+  </table>
+    }@else {
+      <div class="error ms-3 mt-3">
+        <h4>You have no plans yet. Start planning your next adventure!</h4>
+      </div>
+    }
+  </div>
+</div>
+
+
+
