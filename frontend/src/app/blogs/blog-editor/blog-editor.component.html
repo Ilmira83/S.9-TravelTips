@@ -1,0 +1,36 @@
+  <div class="container mt-2">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/app-profile', userId()]">My profile</a></li>
+      <li class="breadcrumb-item"><a routerLink="/app-blogs-list">My blogs</a></li>
+      <li class="breadcrumb-item active">Blog editor</li>
+    </ol>
+    <div class="intro d-block text-center">
+      <h5>Share your experience by creating a new blog post.</h5>
+      <p>Fill in the required fields marked with an <strong>asterisk (*)</strong>. Add details about your adventure, upload photos, and inspire other travelers!</p>
+    </div>
+    <app-blog-form
+    [(isFormValid)]="isFormValid"
+    (imageDataChanged)="setImageData($event)"
+     #blogForm>
+    </app-blog-form>
+    <div class="daily-plan">
+      <app-daily-plan-form></app-daily-plan-form> 
+    </div>
+    <div class="form-buttons d-flex justify-content-center mt-5">
+      @if(!blogID()){
+        <button class="btn btn-dark me-2"
+          type="submit" (click)="addBlog()">Save</button>
+      } @else {
+        <button class="btn btn-dark me-2"
+          type="submit" (click)="updateBlog()">Update</button>
+      }
+      <button class="btn btn-primary" type="button"
+        routerLink="/app-blogs-list"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page">Cancel</button>
+    </div>
+  </div>
+
+
+
+ 
