@@ -1,11 +1,10 @@
-import { Component, computed, inject, ViewChild } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Blog } from '../../shared/models/blog';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { BlogsAPIService } from '../../shared/services/APIs/blogs-api.service';
 import { BlogsUtilsService } from '../../shared/services/utils/blogs-utils.service';
 import { FormsModule } from '@angular/forms';
-import { BlogFormComponent } from '../../shared/forms/blog-form/blog-form.component';
 import { DailyPlanApiService } from '../../shared/services/APIs/dailyPlan-api.service';
 
 @Component({
@@ -19,11 +18,10 @@ export class BlogsListComponent {
   authService = inject(AuthService);
   router = inject(Router);
   dailyPlanService = inject(DailyPlanApiService);
-  userId = this.authService.userId;
   blogsUtils = inject(BlogsUtilsService);
+
+  userId = this.authService.userId;
   search = this.blogsUtils.searchCriteria;
-  isSorted = this.blogsUtils.isSorted;
-  @ViewChild(BlogFormComponent) blogForm!: BlogFormComponent; 
   blogID = this.blogsService.blogID;
 
   blogsList = computed(() => {
@@ -33,15 +31,8 @@ export class BlogsListComponent {
 
   userBloglist = computed(()=> this.blogsUtils.filetredBlogList().filter(blog => blog.userID === this.userId()))
 
-  filetredByDestination(destination:string){
-    this.blogsUtils.selectedDestination.set(destination);
-  }
-
-  deleteBlog(id:number){
-    this.blogID.set(id);    
-    this.blogsService.deleteBlog(id).subscribe(()=> 
-    this.blogsService.blogsList.reload());
-    this.deleteDailyPlan();
+  resetCurrentID(){
+    this.blogID.set(0)
   }
 
   getBlogByID(id:number){
@@ -56,8 +47,11 @@ export class BlogsListComponent {
     });
   }
 
-  resetCurrentID(){
-    this.blogID.set(0)
+  deleteBlog(id:number){
+    this.blogID.set(id);    
+    this.blogsService.deleteBlog(id).subscribe(()=> 
+    this.blogsService.blogsList.reload());
+    this.deleteDailyPlan();
   }
 
   deleteDailyPlan(){

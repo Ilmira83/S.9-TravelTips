@@ -16,9 +16,9 @@
         <ul class="dropdown-menu">
       @for(destination of blogsUtils.destinations; track destination){   
         @if(destination !== '') {
-          <li><a class="dropdown-item" (click)="filetredByDestination(destination)">{{destination}}</a></li> 
+          <li><a class="dropdown-item" (click)="this.blogsUtils.selectedDestination.set(destination)">{{destination}}</a></li> 
         } @else {
-          <li><a class="dropdown-item" (click)="filetredByDestination(destination)">Show all</a></li>
+          <li><a class="dropdown-item" (click)="this.blogsUtils.selectedDestination.set(destination)">Show all</a></li>
         }           
       }
     </ul>
@@ -34,7 +34,7 @@
         <h4 class="mb-0">Your blogs list</h4> 
       </div>    
     </div>
-  @if(userBloglist().length){
+  @if(userBloglist().length > 0){
   <table class="table table-hover mt-3 ms-1">
     <thead>
       <tr>
@@ -60,7 +60,7 @@
     } 
       </tbody>
   </table>
-    } @else if (userBloglist().length !== 0 && (search() || blogsUtils.destinations)){
+    } @else if ((search() !== '' || this.blogsUtils.selectedDestination() !== '') && userBloglist().length === 0){
       <div class="error ms-3 mt-3">
         <h4>No blogs with this criteria.</h4>
       </div>
