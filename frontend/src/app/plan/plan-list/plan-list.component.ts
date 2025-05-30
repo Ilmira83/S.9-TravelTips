@@ -15,15 +15,14 @@ import { DailyPlanApiService } from '../../shared/services/APIs/dailyPlan-api.se
 })
 export class PlanListComponent {
   authService = inject(AuthService);
-  userId = this.authService.userId;
   blogsUtils = inject(BlogsUtilsService);
-  search = this.blogsUtils.searchCriteria;
-  isSorted = this.blogsUtils.isSorted;
   router = inject(Router);
   planService = inject(PlanApiService);
-  planID = this.planService.planID;
   dailyPlanService = inject(DailyPlanApiService);
-  dailyPlanID = this.dailyPlanService.dailyPlanID;
+
+  userId = this.authService.userId;  
+  search = this.blogsUtils.searchCriteria;
+  planID = this.planService.planID;
 
 
   planList = computed(()=> {
@@ -33,16 +32,11 @@ export class PlanListComponent {
 
   userPlanlist = computed(()=> this.blogsUtils.filetredPlanList().filter(plan => plan.userID === this.userId()))
 
-
-  filetredByDestination(destination:string){
-    this.blogsUtils.selectedDestination.set(destination);
-  }
-
   resetCurrentID(){
     this.planID.set(0)
   }
-  //здесь передавать dailyPlanID который тоже внести в таблицу на сервере
-  navigateToBlogDetails(id: number) {
+
+  navigateToPlanDetails(id: number) {
     this.router.navigate(['/app-plan-details', id], { 
       queryParams: { from: 'app-plan-list' }       
     });
