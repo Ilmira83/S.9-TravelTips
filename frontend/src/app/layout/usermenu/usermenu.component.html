@@ -1,16 +1,22 @@
-<section class="nav-item dropdown ms-2 me-3">
-<a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" 
-  role="button" aria-haspopup="true" aria-expanded="false">NICK NAME</a>
-    <div class="dropdown-menu">
+<section class="nav-item  ms-2 me-5">
+<a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" test-id = "dropdown-menu"
+  role="button" aria-haspopup="true" aria-expanded="false">{{currentUser()?.username}}</a>
+    <div class="dropdown-menu dropdown-menu-start dropdown-menu-md-end">
       <a class="dropdown-item"
-       routerLink="/app-profile"
+       [routerLink]="['/app-profile', userId()]"
        routerLinkActive="active"
        ariaCurrentWhenActive="page">My profile</a>
       <a class="dropdown-item" 
        routerLink="/app-blogs-list"
        routerLinkActive="active"
        ariaCurrentWhenActive="page">My blogs</a>
-      <a class="dropdown-item">My plans</a>
-
+      <a class="dropdown-item"
+       routerLink="/app-plan-list"
+       routerLinkActive="active"
+       ariaCurrentWhenActive="page"
+      >My plans</a>
+   <button type="button" class="btn text-light my-2 my-sm-0 ms-2"
+    test-id = "logout-button"
+    (click)="logOut()">Logout</button>
     </div>
-  </section>
+</section>

@@ -1,17 +1,15 @@
-import { Component } from '@angular/core';
-import { UsermenuComponent } from "../usermenu/usermenu.component";
+import { Component, ViewChild } from '@angular/core';
+import { LoginComponent } from '../../core/auth/login/login.component';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  imports: [UsermenuComponent],
+  imports: [ LoginComponent, RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  loggedIn:boolean = false;
-  destinations: string[] = ['Africa', 'America', 'Asia', 'Europe', 'Oceania'];
+  @ViewChild(LoginComponent) loginModal!: LoginComponent;
 
-  logIn(){
-    this.loggedIn = !this.loggedIn
-  }
+  
 }

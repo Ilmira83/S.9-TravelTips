@@ -7,32 +7,32 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="">Home
+          <a class="nav-link active" 
+            routerLink=""
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Home
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link">Blogs</a>
+          <a class="nav-link"
+            routerLink="/app-blogs"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page">Blogs</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link">Destinations</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link">About</a>
+          <a class="nav-link"
+            routerLink="/app-about"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page">About</a>
         </li>       
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-sm-2" type="search" placeholder="Search in blogs...">
-        <button class="btn text-light my-2 my-sm-0" type="submit">Search</button>
-      </form>
-      <form class="d-flex">
-        @if(loggedIn !== true){
-          <button type="button" class="btn btn-secondary my-2 my-sm-0 ms-2" (click)="logIn()">Login</button>          
-        } @else {
-           <button type="button" class="btn text-light my-2 my-sm-0 ms-2" (click)="logIn()">Logout</button>
-          <app-usermenu></app-usermenu>
-        }
+      <form class="d-flex me-3"> 
+        <app-login></app-login>
       </form>
     </div>
   </div>
 </nav>
+
