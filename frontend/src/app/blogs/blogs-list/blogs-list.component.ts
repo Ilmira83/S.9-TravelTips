@@ -6,6 +6,7 @@ import { BlogsAPIService } from '../../shared/services/APIs/blogs-api.service';
 import { BlogsUtilsService } from '../../shared/services/utils/blogs-utils.service';
 import { FormsModule } from '@angular/forms';
 import { BlogFormComponent } from '../../shared/forms/blog-form/blog-form.component';
+import { DailyPlanApiService } from '../../shared/services/APIs/dailyPlan-api.service';
 
 @Component({
   selector: 'app-blogs-list',
@@ -17,6 +18,7 @@ export class BlogsListComponent {
   blogsService = inject(BlogsAPIService);
   authService = inject(AuthService);
   router = inject(Router);
+  dailyPlanService = inject(DailyPlanApiService);
   userId = this.authService.userId;
   blogsUtils = inject(BlogsUtilsService);
   search = this.blogsUtils.searchCriteria;
@@ -36,8 +38,10 @@ export class BlogsListComponent {
   }
 
   deleteBlog(id:number){
+    this.blogID.set(id);    
     this.blogsService.deleteBlog(id).subscribe(()=> 
-    this.blogsService.blogsList.reload())
+    this.blogsService.blogsList.reload());
+    this.deleteDailyPlan();
   }
 
   getBlogByID(id:number){
@@ -56,4 +60,11 @@ export class BlogsListComponent {
     this.blogID.set(0)
   }
 
+  deleteDailyPlan(){
+    const dailyPlanToDelete = this.dailyPlanService.dailyPlanList.value()?.filter((item)=> item.blogID === this.blogID());
+   
+     dailyPlanToDelete?.forEach(element => { this.dailyPlanService.deleteDailyPlan(element.id!).subscribe(()=> 
+    this.dailyPlanService.dailyPlanList.reload())  
+    }); 
+  }
 }
