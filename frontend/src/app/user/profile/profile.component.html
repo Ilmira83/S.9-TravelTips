@@ -32,7 +32,7 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item">Edit profile</a></li>
                 <li><a class="dropdown-item"
-                  (click)="deleteAccount(currentUser()!.id!)"
+                  (click)="openDeleteConfirmation()"
                   >Delete profile</a></li>
               </ul>
             </div>
@@ -125,4 +125,20 @@
 </div>
  </div>
 
+@if( this.infoMess.openInfo()){
+<section class="modal" id="modal">
+  <div class="modal-content">
+    <h1 class="fs-5 text-center">
+      Please confirm the delete action.
+      <div class="delete-confirm d-flex justify-content-center mt-3">
+      <button class="btn btn-primary btn-sm mt-2 my-sm-0 me-2" type="button"
+        (click)="deleteAccount(currentUser()!.id!)"
+      >Confirm</button>
+      <button class="btn btn-secondary btn-sm mt-2 my-sm-0" type="button"
+        (click)="closeDeleteConfirmation()"
+      >Cancel</button>        
+      </div>
+    </h1>
+  </div>
+</section>}
 

@@ -7,6 +7,7 @@ import { BlogsAPIService } from '../../shared/services/APIs/blogs-api.service';
 import { Blog } from '../../shared/models/blog';
 import { PlanApiService } from '../../shared/services/APIs/plan-api.service';
 import { Plan } from '../../shared/models/plan';
+import { InfoalertService } from '../../shared/services/infoalert.service';
 
 
 @Component({
@@ -21,9 +22,11 @@ export class ProfileComponent {
   authService = inject(AuthService);
   planService = inject(PlanApiService);
   route = inject(ActivatedRoute);
-  userId = this.authService.userId;
   router = inject(Router);
+  infoMess = inject(InfoalertService);
 
+  userId = this.authService.userId;  
+  
   userList = computed(() => this.userService.userList.value() ?? [] as User[]);
   currentUser = computed(() => this.userList()!.find((authUser: User) => authUser.fbUID === this.userId()));
   
@@ -35,8 +38,13 @@ export class ProfileComponent {
 
 
   deleteAccount(id:number){
-    this.userService.deleteUser(id).subscribe(()=>
-      this.userService.userList.reload())
+    this.infoMess.deleteConfirmation();
+    if(this.infoMess.deleteConfirm()){
+      this.userService.deleteUser(id).subscribe(()=>
+      this.userService.userList.reload());
+      this.closeDeleteConfirmation();
+      this.logOut()
+    } 
   }
 
   navigateToBlogDetails(id: number) {
@@ -53,5 +61,11 @@ export class ProfileComponent {
   logOut(){
     this.authService.logOut()!
   }
+
+  openDeleteConfirmation(){
+    this.infoMess.openInfo.set(true);
+  }
+
+  closeDeleteConfirmation=()=> this.infoMess.openInfo.set(false)
 
 }
