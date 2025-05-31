@@ -7,28 +7,30 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 import { PlanApiService } from '../../services/APIs/plan-api.service';
 import { BlogsAPIService } from '../../services/APIs/blogs-api.service';
 import { DailyPlanApiService } from '../../services/APIs/dailyPlan-api.service';
+import { ValidationsComponent } from '../../validations/validations.component';
 
 @Component({
   selector: 'app-daily-plan-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ValidationsComponent],
   templateUrl: './daily-plan-form.component.html',
   styleUrl: './daily-plan-form.component.css'
 })
 export class DailyPlanFormComponent {
   infoMess = inject(InfoalertService);
-  infoDailyPlan= this.infoMess.messDailyPlan;
-  toggleInfo:boolean = false;
-  dailyPlanData = signal<DailyPlan[] | null>(null);
   authService = inject(AuthService);
-  userId = this.authService.userId;
   planService = inject(PlanApiService);
-  planID = this.planService.planID;
   blogService = inject(BlogsAPIService);
-  blogID = this.blogService.blogID;
   dailyPlanService = inject(DailyPlanApiService);
-  dailyPlanID = this.dailyPlanService.dailyPlanID;
+  private formBuilder = inject(FormBuilder);
 
-  private formBuilder = inject(FormBuilder)
+  showInfo = signal(false);
+  dailyPlanData = signal<DailyPlan[] | null>(null);
+
+  userId = this.authService.userId;
+  planID = this.planService.planID;
+  blogID = this.blogService.blogID;
+  infoDailyPlan= this.infoMess.messDailyPlan;
+
   dailyPlanForm: FormGroup;
 
   constructor() {
@@ -40,11 +42,11 @@ export class DailyPlanFormComponent {
   }
   createDayFormGroup(dayNumber: number): FormGroup {
     return this.formBuilder.group({
-      dayNumber: [dayNumber || 1],
+      dayNumber: [dayNumber || null, [Validators.required]],
       descriptions: this.formBuilder.array([
         this.formBuilder.group({
           id: [null],
-          description: ['']
+          description: ['', [Validators.required]]
         })
       ])
     });
@@ -57,37 +59,38 @@ export class DailyPlanFormComponent {
   getDayDescriptions(index: number): FormArray {
     return (this.daysArray.at(index) as FormGroup).get('descriptions') as FormArray;
   }
+
   addDay() {
     const newDayNumber = this.daysArray.length;
     this.daysArray.push(this.createDayFormGroup(newDayNumber));
   }
+
   addDescription(index: number) {
     const descriptions = this.getDayDescriptions(index);
     descriptions.push(this.formBuilder.group({
     id: [null],
-    description: ['']
+    description: ['', [Validators.required]]
   }));
   }
+
   removeDay(index: number) {
-  const dayGroup = this.daysArray.at(index) as FormGroup;
-  const dayNumber = dayGroup.get('dayNumber')?.value;
+    const dayGroup = this.daysArray.at(index) as FormGroup;
+    const dayNumber = dayGroup.get('dayNumber')?.value;
 
-  this.deleteDailyPlansByDayNumber(dayNumber);
-
+    this.deleteDailyPlansByDayNumber(dayNumber);
     this.daysArray.removeAt(index);
 
   }
 
   removeDescription(index: number, descIndex: number) {
-  const descriptions = this.getDayDescriptions(index);
-  const descControl = descriptions.at(descIndex);
-  const descText = descControl?.get('description')?.value;
+    const descriptions = this.getDayDescriptions(index);
+    const descControl = descriptions.at(descIndex);
+    const descText = descControl?.get('description')?.value;
 
-  if (descText) {
-    this.deleteDailyPlanDescription(descText);
-  }
-
-  descriptions.removeAt(descIndex);
+    if (descText) {
+      this.deleteDailyPlanDescription(descText);
+    }
+    descriptions.removeAt(descIndex);
   }
 
   deleteDailyPlanDescription(descText: string){
@@ -183,20 +186,14 @@ export class DailyPlanFormComponent {
 }
 
 
-  showInfo(event: MouseEvent){
-    event.stopPropagation();
+  openInfo(){
     this.infoMess.showInfo(this.infoDailyPlan)
-    this.toggleInfo = true
+    this.showInfo.set(true)
   }
 
-  closeInfo=()=> this.toggleInfo = false
+  closeInfo=()=> this.showInfo.set(false)
       
-  ngOnInit(){
-    window.addEventListener('click', () => this.closeInfo());
-  }
-  ngOnDestroy() {
-    window.removeEventListener('click', () => this.closeInfo());
-  }
+
 
 
 
