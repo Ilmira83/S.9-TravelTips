@@ -4,10 +4,17 @@
       <li class="breadcrumb-item"><a routerLink="/app-blogs-list">My blogs</a></li>
       <li class="breadcrumb-item active">Blog editor</li>
     </ol>
+    @if(!blogID()){
     <div class="intro d-block text-center">
       <h5>Share your experience by creating a new blog post.</h5>
-      <p>Fill in the required fields marked with an <strong>asterisk (*)</strong>. Add details about your adventure, upload photos, and inspire other travelers!</p>
+      <p>Complete all required fields marked with an <strong>asterisk (*)</strong>. Add details about your adventure, upload photos, and inspire other travelers!</p>
     </div>
+   } @else {
+    <div class="intro d-block text-center">
+      <h5>Update your blog post and inspire fellow explorers.</h5>
+      <p>Do not forget to complete all required fields marked with an <strong>asterisk (*)</strong>.</p>
+    </div>
+   }
     <app-blog-form
     [(isFormValid)]="isFormValid"
     (imageDataChanged)="setImageData($event)"
