@@ -4,11 +4,19 @@
       <li class="breadcrumb-item"><a routerLink="/app-plan-list">My plans</a></li>
       <li class="breadcrumb-item active">Plan editor</li>
     </ol>
+   @if(!planID()){
     <div class="intro d-block text-center">
       <h5>The best trips begin with a plan. Start yours today!</h5>
       <p>Complete all required fields marked with an <strong>asterisk (*)</strong>. 
         Add notes so you don't miss any important details!</p>
     </div>
+  }  @else {
+    <div class="intro d-block text-center">
+      <h5>Update your plan for the best journey.</h5>
+      <p>Do not forget to complete all required fields marked with an <strong>asterisk (*)</strong>. 
+        Add notes so you don't miss any important details!</p>
+    </div>
+  }
     <app-plan-form
     [(isFormValid)]="isFormValid"></app-plan-form>
     <div class="daily-plan">      
