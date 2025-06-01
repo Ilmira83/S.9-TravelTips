@@ -1,19 +1,19 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { InfoalertService } from '../../services/infoalert.service';
-import { BlogsUtilsService } from '../../services/utils/blogs-utils.service';
 import { DailyPlan } from '../../models/daily-plan';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { PlanApiService } from '../../services/APIs/plan-api.service';
 import { BlogsAPIService } from '../../services/APIs/blogs-api.service';
 import { DailyPlanApiService } from '../../services/APIs/dailyPlan-api.service';
 import { ValidationsComponent } from '../../validations/validations.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-daily-plan-form',
   imports: [ReactiveFormsModule, ValidationsComponent],
   templateUrl: './daily-plan-form.component.html',
-  styleUrl: './daily-plan-form.component.css'
+  styleUrl: './daily-plan-form.component.css',
 })
 export class DailyPlanFormComponent {
   infoMess = inject(InfoalertService);
@@ -21,34 +21,32 @@ export class DailyPlanFormComponent {
   planService = inject(PlanApiService);
   blogService = inject(BlogsAPIService);
   dailyPlanService = inject(DailyPlanApiService);
+  toastrservice = inject(ToastrService);
   private formBuilder = inject(FormBuilder);
 
-  showInfo = signal(false);
   dailyPlanData = signal<DailyPlan[] | null>(null);
 
   userId = this.authService.userId;
   planID = this.planService.planID;
   blogID = this.blogService.blogID;
-  infoDailyPlan= this.infoMess.messDailyPlan;
 
   dailyPlanForm: FormGroup;
 
   constructor() {
     this.dailyPlanForm = this.formBuilder.group({
-      days: this.formBuilder.array([
-        this.createDayFormGroup(0) 
-      ])
+      days: this.formBuilder.array([this.createDayFormGroup(0)]),
     });
   }
+
   createDayFormGroup(dayNumber: number): FormGroup {
     return this.formBuilder.group({
       dayNumber: [dayNumber || null, [Validators.required]],
       descriptions: this.formBuilder.array([
         this.formBuilder.group({
           id: [null],
-          description: ['', [Validators.required]]
-        })
-      ])
+          description: ['', [Validators.required]],
+        }),
+      ]),
     });
   }
 
@@ -67,10 +65,12 @@ export class DailyPlanFormComponent {
 
   addDescription(index: number) {
     const descriptions = this.getDayDescriptions(index);
-    descriptions.push(this.formBuilder.group({
-    id: [null],
-    description: ['', [Validators.required]]
-  }));
+    descriptions.push(
+      this.formBuilder.group({
+        id: [null],
+        description: ['', [Validators.required]],
+      })
+    );
   }
 
   removeDay(index: number) {
@@ -79,7 +79,6 @@ export class DailyPlanFormComponent {
 
     this.deleteDailyPlansByDayNumber(dayNumber);
     this.daysArray.removeAt(index);
-
   }
 
   removeDescription(index: number, descIndex: number) {
@@ -93,14 +92,11 @@ export class DailyPlanFormComponent {
     descriptions.removeAt(descIndex);
   }
 
-  deleteDailyPlanDescription(descText: string){
-    const planID = this.planID();
-    const dailyPlans = this.dailyPlanService.dailyPlanList.value();
+  deleteDailyPlanDescription(descText: string) {
+    if (!this.dailyPlanService.dailyPlanList.value()) return;
 
-    if (!dailyPlans) return;
-
-    const foundItem = dailyPlans.find(item =>
-      item.planID === planID && item.description === descText
+    const foundItem = this.dailyPlanService.dailyPlanList.value()?.find(
+      (item) => item.planID === this.planID() && item.description === descText
     );
 
     if (!foundItem || !foundItem.id) return;
@@ -111,43 +107,45 @@ export class DailyPlanFormComponent {
   }
 
   deleteDailyPlansByDayNumber(dayNumber: number) {
-    const planID = this.planID();
-    const dailyPlans = this.dailyPlanService.dailyPlanList.value();
 
-    if (!dailyPlans) return;
+    if (!this.dailyPlanService.dailyPlanList.value()) return;
 
-    const matchingPlans = dailyPlans.filter(item =>
-      item.planID === planID && item.dayNumber === dayNumber && item.id
+    const matchingPlans = this.dailyPlanService.dailyPlanList.value()?.filter(
+      (item) => item.planID === this.planID() && item.dayNumber === dayNumber && item.id
     );
-
-    matchingPlans.forEach(item => {
+    matchingPlans?.forEach((item) => {
       this.dailyPlanService.deleteDailyPlan(item.id!).subscribe(() => {
-        this.dailyPlanService.dailyPlanList.reload(); // можно перенести за пределы цикла
+        this.dailyPlanService.dailyPlanList.reload(); 
       });
     });
-}
-//я получаю данные введенные пользователем
-  onSubmitDailyPlan(): DailyPlan[] | null {
+  }
 
-    if (!this.dailyPlanForm.valid) return null;
+  onSubmitDailyPlan(): DailyPlan[] | null {
+    
+ /*    if (!this.dailyPlanForm.valid) return ; */
+    if(!this.dailyPlanForm.valid){ this.toastrservice.warning('Please complete all the fields with asteriscs(*).',
+       'Warn', {closeButton: true, positionClass: 'toast-bottom-right'});
+    return null;}
 
     const formValue = this.dailyPlanForm.value;
     const flattenedPlans: DailyPlan[] = [];
     const isPlan = !!this.planID();
     formValue.days.forEach((day: any) => {
-      day.descriptions.forEach((descGroup: { id?: number, description: string }) => {
-        flattenedPlans.push({
-          id: descGroup.id ?? undefined,
-          dayNumber: day.dayNumber,
-          description: descGroup.description,
-          userID: this.userId(),
-          planID: isPlan ? this.planID() : null,
-          blogID: isPlan ? null : this.blogID()
-        });
-      });
+      day.descriptions.forEach(
+        (descGroup: { id?: number; description: string }) => {
+          flattenedPlans.push({
+            id: descGroup.id ?? undefined,
+            dayNumber: day.dayNumber,
+            description: descGroup.description,
+            userID: this.userId(),
+            planID: isPlan ? this.planID() : null,
+            blogID: isPlan ? null : this.blogID(),
+          });
+        }
+      );
     });
-      this.dailyPlanData.set(flattenedPlans); // now array with flat objects
-      return flattenedPlans
+    this.dailyPlanData.set(flattenedPlans); // now array with flat objects
+    return flattenedPlans;
   }
 
   setValue(dailyPlans: DailyPlan[]) {
@@ -156,50 +154,43 @@ export class DailyPlanFormComponent {
       if (!dailyPlans || dailyPlans.length === 0) {
         return;
       }
-    const grouped = new Map<number, DailyPlan[]>();
+      const grouped = new Map<number, DailyPlan[]>();
 
-    dailyPlans.forEach(plan => {
-      if (!grouped.has(plan.dayNumber)) {
-        grouped.set(plan.dayNumber, []);
-      }
-      grouped.get(plan.dayNumber)?.push(plan); 
-    });
+      dailyPlans.forEach((plan) => {
+        if (!grouped.has(plan.dayNumber)) {
+          grouped.set(plan.dayNumber, []);
+        }
+        grouped.get(plan.dayNumber)?.push(plan);
+      });
 
-    const dayGroups = Array.from(grouped.entries()).map(([dayNumber, plans]) =>
-      this.formBuilder.group({
-        dayNumber: [dayNumber],
-        descriptions: this.formBuilder.array(
-          plans.map(p => this.formBuilder.group({
-            id: [p.id ?? null],
-            description: [p.description]
-          }))
-        )
-      })
-    );
+      const dayGroups = Array.from(grouped.entries()).map(
+        ([dayNumber, plans]) =>
+          this.formBuilder.group({
+            dayNumber: [dayNumber],
+            descriptions: this.formBuilder.array(
+              plans.map((dailyPlan) =>
+                this.formBuilder.group({
+                  id: [dailyPlan.id ?? null],
+                  description: [dailyPlan.description],
+                })
+              )
+            ),
+          })
+      );
 
-    const daysFormArray = this.formBuilder.array(dayGroups);
-    this.dailyPlanForm.setControl('days', daysFormArray);
-
-  } catch (error) {
-    console.error('Error setting form values:', error);
-  }
-}
-
-
-  openInfo(){
-    this.infoMess.showInfo(this.infoDailyPlan)
-    this.showInfo.set(true)
+      const daysFormArray = this.formBuilder.array(dayGroups);
+      this.dailyPlanForm.setControl('days', daysFormArray);
+    } catch (error) {
+      console.error('Error setting form values:', error);
+    }
   }
 
-  closeInfo=()=> this.showInfo.set(false)
-      
+  openInfo() {
+    this.infoMess.showInfo(this.infoMess.messDailyPlan);
+    this.infoMess.openInfo.set(true);
+  }
 
-
-
-
-
-
-
+  closeInfo = () => this.infoMess.openInfo.set(false);
 
 
 }
