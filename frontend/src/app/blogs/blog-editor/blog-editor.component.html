@@ -15,11 +15,11 @@
       <p>Do not forget to complete all required fields marked with an <strong>asterisk (*)</strong>.</p>
     </div>
    }
-    <app-blog-form
+    <app-edit-form
     [(isFormValid)]="isFormValid"
-    (imageDataChanged)="setImageData($event)"
+    [(imageData)]="imageData"
      #blogForm>
-    </app-blog-form>
+    </app-edit-form>
     <div class="daily-plan">
       <app-daily-plan-form></app-daily-plan-form> 
     </div>

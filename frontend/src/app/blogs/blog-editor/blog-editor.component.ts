@@ -1,8 +1,6 @@
 import { Component, inject, model, signal, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Blog } from '../../shared/models/blog';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { BlogFormComponent } from "../../shared/forms/blog-form/blog-form.component";
 import { AuthService } from '../../core/services/auth/auth.service';
 import { DailyPlanFormComponent } from "../../shared/forms/daily-plan-form/daily-plan-form.component";
 import { UserApiService } from '../../shared/services/APIs/user-api.service';
@@ -10,15 +8,17 @@ import { BlogsAPIService } from '../../shared/services/APIs/blogs-api.service';
 import { DailyPlanApiService } from '../../shared/services/APIs/dailyPlan-api.service';
 import { DailyPlan } from '../../shared/models/daily-plan';
 import { ToastrService } from 'ngx-toastr';
+import { EditFormComponent } from "../../shared/forms/edit-form/edit-form.component";
+import { Post } from '../../shared/models/post';
 
 @Component({
   selector: 'app-blog-editor',
-  imports: [ReactiveFormsModule, RouterLink, RouterLinkActive, BlogFormComponent, DailyPlanFormComponent],
+  imports: [ReactiveFormsModule, RouterLink, RouterLinkActive, DailyPlanFormComponent, EditFormComponent],
   templateUrl: './blog-editor.component.html',
   styleUrl: './blog-editor.component.css'
 })
 export class BlogEditorComponent {
-  @ViewChild(BlogFormComponent) blogForm!: BlogFormComponent; 
+  @ViewChild(EditFormComponent) editForm!: EditFormComponent; 
   @ViewChild(DailyPlanFormComponent) dailyPlanForm!: DailyPlanFormComponent;
   
   dailyPlanService = inject(DailyPlanApiService);
@@ -29,7 +29,7 @@ export class BlogEditorComponent {
   route = inject(ActivatedRoute);
   router = inject(Router);
 
-  imageData = signal<string>('');  
+  imageData = model<string>('');  
   isFormValid = model<boolean>(false);
 
   blogID = this.blogsService.blogID;
@@ -41,13 +41,13 @@ export class BlogEditorComponent {
   }
 
   addBlog() {
-    const blogData = this.blogForm.onSubmit();
-    if(!this.isFormValid()){ this.toastrservice.warning('Please complete all the fields with asteriscs(*).',
-       'Warn', {closeButton: true, positionClass: 'toast-bottom-right'});
-    return;}
-    if(!blogData) return;
+    const blogData = this.editForm.onSubmit();
 
-    const blog: Blog = {
+    if(!blogData) { this.toastrservice.warning('Please complete all the fields with asteriscs(*).',
+       'Warn', {closeButton: true, positionClass: 'toast-bottom-right'});
+    return};   
+
+    const blog: Post = {
       userID: this.userId(),
       title: blogData.title,
       destination: blogData.destination,
@@ -64,7 +64,7 @@ export class BlogEditorComponent {
     this.blogsService.addBlog(blog).subscribe({
       next: (createdBlog) => {
         this.blogID.set(createdBlog.id!);
-        this.addDailyPlan();
+        if(!this.addDailyPlan()) return;
         this.toastrservice.info(`Blog ${createdBlog.title} was  created.`,
         'Info', { closeButton: true, positionClass: 'toast-bottom-right' } );
         this.blogsService.blogsList.reload();
@@ -82,15 +82,15 @@ export class BlogEditorComponent {
 
   getBlogByID(id:number){
     this.blogsService.getBlogByID(id).subscribe({
-      next: (response: Blog) => {
-        this.blogForm.get('country')?.setValue(response.country);
+      next: (response: Post) => {
+        this.editForm.get('country')?.setValue(response.country);
          const fakeEvent = {
         target: { value: response.country }
       } as unknown as Event;  
 
-      this.blogForm.onCountryChange(fakeEvent);  
+      this.editForm.onCountryChange(fakeEvent);  
     setTimeout(() => {
-      this.blogForm.setValue({
+      this.editForm.setValue({
         title: response.title,
         destination: response.destination,
         city: response.city,
@@ -106,9 +106,9 @@ export class BlogEditorComponent {
   }
 
   updateBlog(){
-    const blogData = this.blogForm.onSubmit();
+    const blogData = this.editForm.onSubmit();
     if(!blogData) return;
-    const blog: Partial<Blog> = {
+    const blog: Partial<Post> = {
       title: blogData.title,
       destination: blogData.destination,
       country: blogData.country,
@@ -128,20 +128,21 @@ export class BlogEditorComponent {
         'Info', { closeButton: true, positionClass: 'toast-bottom-right' } );  
         this.blogsService.blogsList.reload();        
         this.router.navigate(['/app-blogs-list'])
-        this.blogForm.resetForm()
+        this.editForm.resetForm()
       }
     });
   }
 
   addDailyPlan(){
-    this.dailyPlanForm.onSubmitDailyPlan();  
-    const dailyPlanData = this.dailyPlanForm.dailyPlanData();
-    if(!dailyPlanData) return;
+    const dailyPlanData = this.dailyPlanForm.onSubmitDailyPlan();
+    if(!dailyPlanData) return false;
+
     this.dailyPlanService.addDailyPlan(dailyPlanData).subscribe({
       next: () => {
         this.dailyPlanService.dailyPlanList.reload();
       }
     }); 
+    return true;
   }
 
   getDailyPlanByBlogID(){
