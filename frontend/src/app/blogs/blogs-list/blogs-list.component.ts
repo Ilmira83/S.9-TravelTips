@@ -6,6 +6,7 @@ import { BlogsAPIService } from '../../shared/services/APIs/blogs-api.service';
 import { BlogsUtilsService } from '../../shared/services/utils/blogs-utils.service';
 import { FormsModule } from '@angular/forms';
 import { DailyPlanApiService } from '../../shared/services/APIs/dailyPlan-api.service';
+import { InfoalertService } from '../../shared/services/infoalert.service';
 
 @Component({
   selector: 'app-blogs-list',
@@ -19,6 +20,7 @@ export class BlogsListComponent {
   router = inject(Router);
   dailyPlanService = inject(DailyPlanApiService);
   blogsUtils = inject(BlogsUtilsService);
+  infoMess = inject(InfoalertService);
 
   userId = this.authService.userId;
   search = this.blogsUtils.searchCriteria;
@@ -32,7 +34,8 @@ export class BlogsListComponent {
   userBloglist = computed(()=> this.blogsUtils.filetredBlogList().filter(blog => blog.userID === this.userId()))
 
   resetCurrentID(){
-    this.blogID.set(0)
+    this.blogID.set(0);
+    
   }
 
   getBlogByID(id:number){
@@ -42,16 +45,19 @@ export class BlogsListComponent {
 
   navigateToBlogDetails(id: number) {
     this.router.navigate(['/app-blog-details', id], { 
-      queryParams: { from: 'app-blogs-list' } 
-      
+      queryParams: { from: 'app-blogs-list' }  //for breadcrumbs     
     });
   }
 
   deleteBlog(id:number){
-    this.blogID.set(id);    
-    this.blogsService.deleteBlog(id).subscribe(()=> 
-    this.blogsService.blogsList.reload());
-    this.deleteDailyPlan();
+    this.infoMess.deleteConfirmation();
+    if(this.infoMess.deleteConfirm()){
+      this.blogID.set(id);    
+      this.blogsService.deleteBlog(id).subscribe(()=> 
+      this.blogsService.blogsList.reload());
+      this.deleteDailyPlan();
+      this.closeDeleteConfirmation()
+    }
   }
 
   deleteDailyPlan(){
@@ -61,4 +67,10 @@ export class BlogsListComponent {
     this.dailyPlanService.dailyPlanList.reload())  
     }); 
   }
+
+  openDeleteConfirmation(){
+    this.infoMess.openInfo.set(true);
+  }
+
+  closeDeleteConfirmation=()=> this.infoMess.openInfo.set(false)
 }
