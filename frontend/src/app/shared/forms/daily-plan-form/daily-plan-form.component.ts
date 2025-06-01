@@ -120,10 +120,8 @@ export class DailyPlanFormComponent {
     });
   }
 
-  onSubmitDailyPlan(): DailyPlan[] | null {
-    
- /*    if (!this.dailyPlanForm.valid) return ; */
-    if(!this.dailyPlanForm.valid){ this.toastrservice.warning('Please complete all the fields with asteriscs(*).',
+  onSubmitDailyPlan(): DailyPlan[] | null {    
+  if(!this.dailyPlanForm.valid){ this.toastrservice.warning('Please complete all the fields with asteriscs(*).',
        'Warn', {closeButton: true, positionClass: 'toast-bottom-right'});
     return null;}
 
