@@ -11,7 +11,7 @@ export interface Blog {
   month: string,
   year: string,
   nDays: number,
-  image: string,
+  image?: string,
   createdAt?: string,
   updatedAt?: string
 }
