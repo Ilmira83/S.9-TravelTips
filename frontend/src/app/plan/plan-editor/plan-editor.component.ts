@@ -2,26 +2,21 @@ import { Component, inject, model, ViewChild } from '@angular/core';
 import { DailyPlanFormComponent } from '../../shared/forms/daily-plan-form/daily-plan-form.component';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
-import { PlanFormComponent } from '../../shared/forms/plan-form/plan-form.component';
 import { PlanApiService } from '../../shared/services/APIs/plan-api.service';
-import { Plan } from '../../shared/models/plan';
 import { DailyPlan } from '../../shared/models/daily-plan';
 import { DailyPlanApiService } from '../../shared/services/APIs/dailyPlan-api.service';
 import { ToastrService } from 'ngx-toastr';
+import { EditFormComponent } from "../../shared/forms/edit-form/edit-form.component";
+import { Post } from '../../shared/models/post';
 
 @Component({
   selector: 'app-plan-editor',
-  imports: [
-    DailyPlanFormComponent,
-    RouterLink,
-    RouterLinkActive,
-    PlanFormComponent,
-  ],
+  imports: [ DailyPlanFormComponent, RouterLink, RouterLinkActive, EditFormComponent ],
   templateUrl: './plan-editor.component.html',
   styleUrl: './plan-editor.component.css',
 })
 export class PlanEditorComponent {
-  @ViewChild(PlanFormComponent) planForm!: PlanFormComponent;
+  @ViewChild(EditFormComponent) editForm!: EditFormComponent;
   @ViewChild(DailyPlanFormComponent) dailyPlanForm!: DailyPlanFormComponent;
 
   authService = inject(AuthService);
@@ -37,7 +32,7 @@ export class PlanEditorComponent {
   dailyPlanID = this.dailyPlanService.dailyPlanID;
 
   addPlan() {
-    const plan = this.planForm.onSubmit();
+    const plan = this.editForm.onSubmit();
     if (!this.isFormValid()) {
       this.toastrservice.warning('Please complete all the fields with asteriscs(*).',
         'Warn', { closeButton: true, positionClass: 'toast-bottom-right' } );
@@ -65,14 +60,14 @@ export class PlanEditorComponent {
 
   getPlanByID(id: number) {
    this.planService.getPlanByID(id).subscribe({
-    next: (plan: Plan) => {
-      this.planForm.setValue(plan);
+    next: (plan: Post) => {
+      this.editForm.setValue(plan);
     },
   });
   }
 
   updatePlan() {
-    const planData = this.planForm.onSubmit();
+    const planData = this.editForm.onSubmit();
     if (!planData) return;
     this.planService.updatePlan(this.planID()!, planData).subscribe({
       next: () => {
@@ -81,8 +76,8 @@ export class PlanEditorComponent {
         'Info', { closeButton: true, positionClass: 'toast-bottom-right' } );
         this.planService.plansList.reload();
         this.router.navigate(['app-plan-list']);
-        this.planForm.resetForm();
-      },
+        this.editForm.resetForm();
+      },  
     });
   }
 
