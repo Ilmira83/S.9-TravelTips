@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Blog } from '../../models/blog';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { environment } from '../../../environment/environment';
+import { Post } from '../../models/post';
 
 @Injectable({
   providedIn: 'root'
@@ -20,16 +21,16 @@ export class BlogsAPIService {
  blogsList = httpResource<Blog[]>(() => `${this.myAppUrl}${this.myApiUrl}`);  
 
  
-  addBlog(blog:Blog){
-    return this.http.post<Blog>(`${this.myAppUrl}${this.myApiUrl}`, blog)
+  addBlog(blog:Post){
+    return this.http.post<Post>(`${this.myAppUrl}${this.myApiUrl}`, blog)
   }
   deleteBlog(id:number){
     return this.http.delete(`${this.myAppUrl}${this.myApiUrl}${id}`)
   }
   getBlogByID(id:number){
-    return this.http.get<Blog>(`${this.myAppUrl}${this.myApiUrl}${id}`)
+    return this.http.get<Post>(`${this.myAppUrl}${this.myApiUrl}${id}`)
   }
-  updateBlog(id:number, blog:Partial<Blog>){
+  updateBlog(id:number, blog:Partial<Post>){
     return this.http.put(`${this.myAppUrl}${this.myApiUrl}${id}`, blog)
   }
 
