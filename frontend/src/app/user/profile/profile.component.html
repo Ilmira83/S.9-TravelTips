@@ -52,6 +52,7 @@
   <div class="blog-list px-md-5 mt-3">
     <div class="title text text-center"
       routerLink="/app-blogs-list"
+      [queryParams]="{ mode: 'blog' }"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"><h4>Recent blogs</h4></div>
       <hr class="profile-divider">  
@@ -81,6 +82,7 @@
     }
     <button class="btn btn-primary btn-sm my-2 my-sm-0" type="button"
       routerLink="/app-blog-editor"
+      [queryParams]="{ mode: 'blog' }"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"
       >Add new blog</button>
@@ -89,6 +91,7 @@
    <div class="blog-list px-md-5">
     <div class="title text text-center"
       routerLink="/app-plan-list"
+      [queryParams]="{ mode: 'plan' }"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"><h4>Recent plans</h4></div>
       <hr class="profile-divider">   
@@ -118,6 +121,7 @@
     }
     <button class="btn btn-secondary btn-sm mt-2 my-sm-0" type="button"
       routerLink="/app-plan-editor"
+      [queryParams]="{ mode: 'plan' }"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"
       >Add new plan</button>

@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { User } from '../../shared/models/user';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { UserApiService } from '../../shared/services/APIs/user-api.service';
@@ -21,7 +21,6 @@ export class ProfileComponent {
   userService = inject(UserApiService);
   authService = inject(AuthService);
   planService = inject(PlanApiService);
-  route = inject(ActivatedRoute);
   router = inject(Router);
   infoMess = inject(InfoalertService);
 
@@ -40,8 +39,7 @@ export class ProfileComponent {
   deleteAccount(id:number){
     this.infoMess.deleteConfirmation();
     if(this.infoMess.deleteConfirm()){
-      this.userService.deleteUser(id).subscribe(()=>
-      this.userService.userList.reload());
+      this.userService.deleteUser(id).subscribe(()=> this.userService.userList.reload());
       this.closeDeleteConfirmation();
       this.logOut()
     } 
@@ -51,12 +49,12 @@ export class ProfileComponent {
   this.router.navigate(['/app-blog-details', id], { 
     queryParams: { from: 'app-blogs-list' } 
   });
-}
+  }
   navigateToPlanDetails(id: number) {
   this.router.navigate(['/app-plan-details', id], { 
     queryParams: { from: 'app-plan-list' } 
   });
-}
+  }
 
   logOut(){
     this.authService.logOut()!
