@@ -61,10 +61,15 @@ export class BlogEditorComponent {
       nDays: blogData.nDays,
       image: this.imageData(),
     };
+
     this.blogsService.addBlog(blog).subscribe({
       next: (createdBlog) => {
         this.blogID.set(createdBlog.id!);
-        if(!this.addDailyPlan()) return;
+        if(!this.addDailyPlan()){
+          this.toastrservice.warning('Please complete all the fields with asteriscs(*).',
+       'Warn', {closeButton: true, positionClass: 'toast-bottom-right'});
+        return;  
+        } 
         this.toastrservice.info(`Blog ${createdBlog.title} was  created.`,
         'Info', { closeButton: true, positionClass: 'toast-bottom-right' } );
         this.blogsService.blogsList.reload();
@@ -82,24 +87,15 @@ export class BlogEditorComponent {
 
   getBlogByID(id:number){
     this.blogsService.getBlogByID(id).subscribe({
-      next: (response: Post) => {
-        this.editForm.get('country')?.setValue(response.country);
+      next: (blog: Post) => {
+        this.editForm.get('country')?.setValue(blog.country);
          const fakeEvent = {
-        target: { value: response.country }
+        target: { value: blog.country }
       } as unknown as Event;  
 
       this.editForm.onCountryChange(fakeEvent);  
     setTimeout(() => {
-      this.editForm.setValue({
-        title: response.title,
-        destination: response.destination,
-        city: response.city,
-        description: response.description,
-        travelers: response.travelers,
-        month: response.month,
-        year: response.year,
-        nDays: response.nDays,
-     });
+      this.editForm.setValue(blog);
     }, 100 );
   }
     }); 
@@ -108,23 +104,11 @@ export class BlogEditorComponent {
   updateBlog(){
     const blogData = this.editForm.onSubmit();
     if(!blogData) return;
-    const blog: Partial<Post> = {
-      title: blogData.title,
-      destination: blogData.destination,
-      country: blogData.country,
-      city: blogData.city,
-      description: blogData.description,
-      travelers: blogData.travelers,
-      costs: blogData.costs,
-      month: blogData.month,
-      year: blogData.year,
-      nDays: blogData.nDays,
 
-    }
-    this.blogsService.updateBlog(this.blogID()!, blog).subscribe({
+    this.blogsService.updateBlog(this.blogID()!, blogData).subscribe({
       next: () => {  
         this.updateDailyPlansByBlogID();  
-        this.toastrservice.info(`Blog ${blog.title} was  updated.`,
+        this.toastrservice.info(`Blog ${blogData.title} was  updated.`,
         'Info', { closeButton: true, positionClass: 'toast-bottom-right' } );  
         this.blogsService.blogsList.reload();        
         this.router.navigate(['/app-blogs-list'])
