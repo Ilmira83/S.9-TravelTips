@@ -12,8 +12,9 @@
       type="text"
       id="title"
       formControlName="title"
+      test-id="title"
     />
-    <app-validations [control]="editForm.get('title')" />
+    <app-validations [control]="editForm.get('title')" test-id="validation-title"/>
   </div>
   <div class="selects">
     <div class="destination flex-grow-1">
