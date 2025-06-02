@@ -1,0 +1,45 @@
+<div class="container">
+  <ol class="breadcrumb">
+    @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+      <li class="breadcrumb-item" [class.active]="last">
+        @if (!last) {
+          <a [routerLink]="crumb.url">{{ crumb.label }}</a>
+        } @else {
+          {{ crumb.label }}
+        }
+      </li>
+    }
+  </ol>
+  <section class="container blog-details">
+    <header class="w-100">
+      <div class="blog-image mb-3 w-100">
+        <img [src]="selectedBlog()?.image" alt="" class="w-100">
+      </div>
+      <div class="nickname mb-3 fs-5">Author: {{currentUser()?.username}}</div>
+      <div class="title">
+        <h3>{{selectedBlog()?.title}}</h3>
+      </div> 
+      <div class="destination d-flex gap-3">
+        <div class="region mb-3 fw-bold">{{selectedBlog()?.destination}}</div>
+        <div class="country-city mb-3">{{selectedBlog()?.country}}, {{selectedBlog()?.city}}</div>
+      </div>
+      <div class="period d-flex gap-3">
+        <div class="period mb-3">{{selectedBlog()?.month}}, {{selectedBlog()?.year}}</div>
+        <div class="nTravelers mb-3">{{selectedBlog()?.travelers}} travelers</div>
+      </div>
+    </header>
+    <div class="section-divider"></div>
+    <main>
+      <div class="description mb-3">{{selectedBlog()?.description}}</div>
+    </main>
+      <section class="daily-plan mb-5">
+        <app-daily-plan [(selectedBlog)]="selectedBlog"></app-daily-plan>
+      </section>
+<!--     <footer>
+        <div class="card-btn d-flex justify-content-center align-items-end mt-5 mb-5">
+          <button type="button" class="btn btn-dark btn-sm me-3">
+           Back to blogs</button>
+        </div>
+    </footer> -->
+  </section>
+</div>

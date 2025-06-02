@@ -1,0 +1,40 @@
+  <div class="container mt-2 mb-5">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/app-profile', userId()]">My profile</a></li>
+      <li class="breadcrumb-item"><a routerLink="/app-plan-list">My plans</a></li>
+      <li class="breadcrumb-item active">Plan editor</li>
+    </ol>
+   @if(!planID()){
+    <div class="intro d-block text-center">
+      <h5>The best trips begin with a plan. Start yours today!</h5>
+      <p>Complete all required fields marked with an <strong>asterisk (*)</strong>. 
+        Add notes so you don't miss any important details!</p>
+    </div>
+  }  @else {
+    <div class="intro d-block text-center">
+      <h5>Update your plan for the best journey.</h5>
+      <p>Do not forget to complete all required fields marked with an <strong>asterisk (*)</strong>. 
+        Add notes so you don't miss any important details!</p>
+    </div>
+  }
+    <app-edit-form
+    [(isFormValid)]="isFormValid"></app-edit-form>
+    <div class="daily-plan">      
+      <app-daily-plan-form></app-daily-plan-form>
+    </div>
+    <div class="form-buttons d-flex justify-content-center mt-5">
+      @if(!planID()){
+        <button class="btn btn-dark me-2"
+          type="submit" (click)="addPlan()">Save</button>
+      } @else {
+        <button class="btn btn-dark me-2"
+          type="submit" (click)="updatePlan()">Update</button>
+      }
+
+      <button class="btn btn-primary" type="button"
+        routerLink="/app-plan-list"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page">Cancel</button>
+    </div>
+  </div>
+

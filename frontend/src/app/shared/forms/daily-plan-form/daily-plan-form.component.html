@@ -1,0 +1,79 @@
+<form [formGroup]="dailyPlanForm" class="daily-plan-editor mb-5 mt-3 ms-3">
+  <div class="daile-plan-title d-flex align-items-end">
+    <p for="textarea" class="form-label fs-4 mt-4 me-1 mb-2">
+      Provide a short description for each day of your trip*:
+    </p>
+    <button
+      type="button"
+      class="btn info btn-primary btn-sm mb-2"
+      (click)="openInfo()"
+    >i</button>
+  </div>
+  <div class="day d-grid align-items-end" formArrayName="days">
+    @for (day of daysArray.controls; track $index; let i = $index) {
+    <div class="day mt-3 me-3" [formGroupName]="i">
+      <h5>Day {{ day.get("dayNumber")?.value }}</h5>
+      <h6 for="days" class="col-form-label-sm mt-2 mb-1">State day number*</h6>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        formControlName="dayNumber"/>
+      <app-validations [control]="day.get('dayNumber')" />
+      <div class="description-array" formArrayName="descriptions">
+        @for(description of getDayDescriptions(i).controls; track $index; let k
+        = $index){
+        <div class="textarea" [formGroupName]="k">
+          <h6 for="days" class="col-form-label-sm mt-1 ms-2">Description*</h6>
+          <textarea
+            class="form-control w-100"
+            id="free-format-text"
+            rows="1"
+            placeholder="Ex.g.: Travel to destination..."
+            formControlName="description">
+          </textarea>
+          <app-validations [control]="description.get('description')" />
+          @if(getDayDescriptions(i).controls.length > 1){
+          <button
+            class="btn remove-btn btn-dark btn-sm me-3"
+            (click)="removeDescription(i, k)"
+          > x </button>
+          }
+        </div>
+        }
+      </div>
+      <button
+        type="button"
+        class="btn btn-dark btn-sm me-3 mt-3 mb-2"
+        (click)="addDescription(i)"
+      > Add description </button>
+      @if(daysArray.controls.length > 1) {
+      <button class="btn btn-dark btn-sm me-3 mt-3 mb-2" (click)="removeDay(i)">
+        Delete this day
+      </button>
+      }
+    </div>
+    }
+    <div class="d-flex">
+      <button
+        type="button"
+        class="btn btn-primary btn-sm me-3 mt-2"
+        (click)="addDay()"
+      > Add new day </button>
+    </div>
+  </div>
+</form>
+
+@if(infoMess.openInfo()){
+<section class="modal" id="modal">
+  <div class="modal-content">
+    <h1 class="fs-5">
+      {{ infoMess.mess() }}
+    </h1>
+    <div class="btn d-flex justify-content-center">
+      <button type="button" class="btn btn-primary btn-sm"
+      (click)="closeInfo()"
+      >Close</button>   
+    </div>
+  </div>
+</section>
+}

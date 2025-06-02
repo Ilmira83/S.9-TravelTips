@@ -1,0 +1,24 @@
+ <div class="photos">
+    <label for="blogPhoto" class="form-label mt-4 me-3">Add your photos:</label>
+    <button
+      class="btn btn-secondary btn-sm me-3"
+      accept="image/*"
+      multiple
+      type="button"
+      (click)="fileInput.click()"
+    >
+      Pick the files
+    </button>
+    @if(imageData) {
+    <img [src]="imageData" alt="" height="200" class="me-2" />
+    }
+    <input
+      style="display: none"
+      #fileInput
+      class="form-control"
+      type="file"
+      (change)="onFileSelected($event)"
+      multiple
+      id="blogPhoto"
+    />
+  </div>

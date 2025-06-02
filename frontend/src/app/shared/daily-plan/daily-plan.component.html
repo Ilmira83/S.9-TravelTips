@@ -1,0 +1,120 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Day</th>
+      <th scope="col">Description</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    @if(selectedPlan()){ @for(dp of selectedDailyPlan(); track dp.id){
+    <tr class="table-light pl-2">
+      <th scope="row">{{ dp.dayNumber }}</th>
+      <td>{{ dp.description }}</td>
+      <td class="action-button">
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm ms-3"
+          (click)="deleteDailyPlan(dp.id!)"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+    } } @else if (selectedBlog()) { @for(dp of selectedDailyBlogPlan(); track
+    dp.id){
+    <tr class="table-light pl-2">
+      <th scope="row">{{ dp.dayNumber }}</th>
+      <td>{{ dp.description }}</td>
+      @if(userId()===dp.userID){
+      <td class="action-button">
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm ms-3"
+          (click)="deleteDailyPlan(dp.id!)"
+        >
+          Delete
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm ms-3"
+          (click)="openModal(dp.id!)"
+        >
+          Add to my plan
+        </button>
+      </td>
+      } @else {
+      <td class="action-button">
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm ms-3"
+          (click)="openModal(dp.id!)"
+        >
+          Add to my plan
+        </button>
+      </td>
+      }
+    </tr>
+
+    } }
+  </tbody>
+</table>
+
+ @if(modalOpen()){
+  <div class="modal">
+    <form class="modal-content" [formGroup]="radioForm">
+    @if(userPlanList()!.length > 0){
+      <p class="modal-title text-center mb-3 fs-5">
+        Choose the plan to save the adventure.
+      </p>
+      @for(plan of userPlanList(); track plan.id){
+      <div class="form-check d-block ps-5">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="selectedPlanID"
+          id="choosePlan"
+          value="{{ plan.id }}"
+          formControlName="selectedPlanID"
+        />
+        <label class="form-check-label" for="choosePlan">
+          {{ plan.title }}
+        </label>
+      </div>
+      }
+      <div class="modal-btns d-flex justify-content-center">
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm ms-3 me-2"
+          (click)="addSelectedDailyPlan()"
+        >
+          Add to my plan
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-sm ms-3"
+          (click)="closeModal()"
+        >
+          Cancel
+        </button>
+      </div>
+      }@else {
+      <p class="modal-title text-center mb-3 fs-5">You have no plans yet.</p>
+      <p class="modal-title text-center mb-3 fs-5">
+        Create a plan to add daily adventures there.
+      </p>
+      <div class="modal-btns d-flex justify-content-center">
+        <button
+          type="button"
+          class="btn btn-primary btn-sm ms-3"
+          (click)="closeModal()"
+        >
+          Cancel
+        </button>
+      </div>
+      }
+    </form>
+  </div>
+}
+
+

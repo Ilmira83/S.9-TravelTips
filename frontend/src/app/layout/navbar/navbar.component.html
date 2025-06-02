@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+  <div class="container-fluid">
+     <a class="navbar-brand" ><h5>TravelTips</h5></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" 
+            routerLink=""
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Home
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+            routerLink="/app-blogs"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page">Blogs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+            routerLink="/app-about"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page">About</a>
+        </li>       
+      </ul>
+      <form class="d-flex me-3"> 
+        <app-login></app-login>
+      </form>
+    </div>
+  </div>
+</nav>
+

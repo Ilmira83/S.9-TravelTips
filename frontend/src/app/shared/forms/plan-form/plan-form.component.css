@@ -1,0 +1,24 @@
+.plan-editor{
+  display: grid;
+
+}
+.selects{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: start;
+}
+
+#free-format-text::placeholder {
+  font-size: 0.8em; 
+  color: #6c757d; 
+  opacity: 1;    
+}
+  
+#free-format-text {
+  max-height: 50vh; 
+  overflow-y: auto;
+  resize: vertical;
+  min-height: 100px; 
+}
+

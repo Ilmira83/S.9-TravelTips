@@ -1,0 +1,90 @@
+ <div class="container mt-2">
+  <div class="nav d-flex justify-content-between">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/app-profile', userId()]">My profile</a></li>
+        <li class="breadcrumb-item active">My blogs</li>
+      </ol>
+      <div class="nav-buttons d-flex align-items-center">
+        <form class="d-flex">
+          <input class="form-control form-control-sm me-sm-2" type="search" placeholder="Search in blogs..."
+            [ngModel]="blogsUtils.searchCriteria()" 
+            (ngModelChange)="blogsUtils.searchCriteria.set($event)" 
+            name="search">
+        </form>
+        <button class="btn btn-secondary dropdown-toggle btn-sm my-2 me-2 my-sm-0" type="button" data-bs-toggle="dropdown"
+        >Filter</button>
+        <ul class="dropdown-menu">
+      @for(destination of blogsUtils.destinations; track destination){   
+        @if(destination !== '') {
+          <li><a class="dropdown-item" (click)="this.blogsUtils.selectedDestination.set(destination)">{{destination}}</a></li> 
+        } @else {
+          <li><a class="dropdown-item" (click)="this.blogsUtils.selectedDestination.set(destination)">Show all</a></li>
+        }           
+      }
+    </ul>
+        <button class="btn btn-primary btn-sm my-2 my-sm-0" type="button"
+          routerLink="/app-blog-editor"
+          [queryParams]="{ mode: 'blog' }"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          (click)="resetCurrentID()">Add new blog</button>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-end mt-2">
+      <div class="header ms-3 mb-0">
+        <h4 class="mb-0">Your blogs list</h4> 
+      </div>    
+    </div>
+  @if(userBloglist().length > 0){
+  <table class="table table-hover mt-3 ms-1">
+    <thead>
+      <tr>
+        <th class="ps-3" scope="col">Title</th>
+        <th scope="col">Date</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>  
+      @for(blog of userBloglist(); track blog.id){
+      <tr class="table-primary">
+        <th class="ps-3" scope="row" (click)="navigateToBlogDetails(blog.id!)">{{blog.title}}</th>
+        <th scope="row" (click)="navigateToBlogDetails(blog.id!)">{{blog.month}}, {{blog.year}}</th>
+        <th class="modify_buttons text-center">
+          <button type="button" class="btn btn-outline-light btn-sm"
+          (click)="getBlogByID(blog.id!)"
+          >Edit</button>
+          <button type="button" class="btn btn-secondary btn-sm ms-2"
+          (click)="openDeleteConfirmation()"
+          >Delete</button>
+        </th>
+      </tr>
+    @if( this.infoMess.openInfo()){
+    <section class="modal" id="modal">
+      <div class="modal-content">
+        <h1 class="fs-5 text-center">
+          Please confirm the delete action.
+          <div class="delete-confirm d-flex justify-content-center mt-3">
+          <button class="btn btn-primary btn-sm mt-2 my-sm-0 me-2" type="button"
+            (click)="deleteBlog(blog.id!)"
+          >Confirm</button>
+          <button class="btn btn-secondary btn-sm mt-2 my-sm-0" type="button"
+            (click)="closeDeleteConfirmation()"
+          >Cancel</button>        
+          </div>
+        </h1>
+      </div>
+    </section>}
+    } 
+      </tbody>
+  </table>
+    } @else if ((search() !== '' || this.blogsUtils.selectedDestination() !== '') && userBloglist().length === 0){
+      <div class="error ms-3 mt-3">
+        <h4>No blogs with this criteria.</h4>
+      </div>
+    }@else {
+      <div class="error ms-3 mt-3">
+        <h4>No blogs yet.</h4>
+      </div>
+    }
+ </div>
+

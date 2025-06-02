@@ -1,0 +1,150 @@
+<form
+  [formGroup]="editForm"
+  class="post-editor ms-3 me-3"
+  (input)="checkFormValidity()"
+>
+  <div class="title">
+    <label class="col-form-label col-form-label-lg mt-4" for="inputLarge"
+      >Write the title*</label
+    >
+    <input
+      class="form-control form-control-lg"
+      type="text"
+      id="title"
+      formControlName="title"
+      test-id="title"
+    />
+    <app-validations [control]="editForm.get('title')" test-id="validation-title"/>
+  </div>
+  <div class="selects">
+    <div class="destination flex-grow-1">
+      <label for="destinationSelect" class="col-form-label-sm mt-4"
+        >Select continent*</label
+      >
+      <select
+        class="form-select"
+        id="destinationSelect"
+        formControlName="destination"
+      >
+        @for(destination of blogUtils.destinations; track destination){
+        <option>{{ destination }}</option>
+        }
+      </select>
+      <app-validations [control]="editForm.get('destination')" />
+    </div>
+    <div class="date flex-grow-1">
+      <label for="dateSelect" class="col-form-label-sm mt-4"
+        >Select date*</label
+      >
+      <select class="form-select" id="monthSelect" formControlName="month">
+        <option></option>
+        @for(month of blogUtils.months; track month){
+        <option>{{ month }}</option>
+        }
+      </select>
+      <app-validations [control]="editForm.get('month')" />
+      <select class="form-select" id="yearSelect" formControlName="year">
+        <option></option>
+        @for(year of blogUtils.years; track year){
+        <option>{{ year }}</option>
+        }
+      </select>
+      <app-validations [control]="editForm.get('year')" />
+    </div>
+    <div class="date flex-grow-1">
+      <label for="dateSelect" class="col-form-label-sm mt-4"
+        >Select number of days*</label
+      >
+      <select class="form-select" id="nDaysSelect" formControlName="nDays">
+        <option></option>
+        @for(day of blogUtils.days; track day){
+        <option>{{ day }}</option>
+        }
+      </select>
+      <app-validations [control]="editForm.get('nDays')" />
+    </div>
+    <div class="travelers flex-grow-1">
+      <label for="travelersSelect" class="col-form-label-sm mt-4"
+        >Select number of travelers*</label
+      >
+      <select class="form-select" id="adultsSelect" formControlName="travelers">
+        <option></option>
+        @for(traveler of blogUtils.travelers; track traveler){
+        <option>{{ traveler }}</option>
+        }
+      </select>
+      <app-validations [control]="editForm.get('travelers')" />
+    </div>
+    <div class="coutnry flex-grow-1">
+      <label
+        for="travelersSelect"
+        style="min-width: 150px"
+        class="w-auto col-form-label-sm mt-4"
+        >Select Country*</label
+      >
+      <select
+        class="form-select"
+        formControlName="country"
+        (change)="onCountryChange($event)"
+      >
+        <option></option>
+        @for(destination of countriesList(); track destination){
+        <option>{{ destination.country }}</option>
+        }
+      </select>
+      <app-validations [control]="editForm.get('country')" />
+    </div>
+    <div class="city flex-grow-1">
+      <label
+        for="travelersSelect"
+        style="min-width: 150px"
+        class="w-auto col-form-label-sm mt-4"
+        >Select City</label
+      >
+      <select class="form-select" formControlName="city">
+        <option></option>
+        @if (selectedCountry()) { @for (city of selectedCountry()!.cities; track
+        city) {
+        <option>{{ city }}</option>
+        }}
+      </select>
+      <app-validations [control]="editForm.get('city')" />
+    </div>
+  </div>
+  <div class="textarea">
+  @if(modeSignal() === 'blog'){
+    <label for="textarea" class="form-label mt-4"
+      >Write about your advanture</label
+    >
+    <textarea
+      class="form-control"
+      rows="5"
+      placeholder="Ex.g.: Start with important Fact/TIPS (write here the info travellers should know before to go to the destination): 
+          weather conditions in the period of your stay;
+          language experience;
+          currency exchange;
+          internet/wi-fi availability;
+          anything else important you think should be stated here."
+      formControlName="description"
+    ></textarea>
+  } @else if (modeSignal() === 'plan') {
+  <div class="textarea">
+    <label for="textarea" class="form-label mt-4">Notes:</label>
+    <textarea
+      class="form-control"
+      rows="5"
+      aria-label="Notes"
+      placeholder="Ex.g.: 1. Pre-Trip Essentials - Documents, Money, Health/Safety;
+          2. Packing Reminders - Clothing/Tech;
+          3. .... "
+      formControlName="description"
+    ></textarea>
+  </div>
+  }
+  </div>
+  @if(modeSignal()==='blog'){
+    <app-image-load-form
+      (imageDataChanged)="setImageData($event)"
+    ></app-image-load-form>
+  }
+</form>

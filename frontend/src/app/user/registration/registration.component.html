@@ -1,0 +1,60 @@
+<div class="modal-body">  
+  <form [formGroup]="newUser">
+    <p>Please enter all the data with asteriscs(*) to register.</p>
+      <div>
+        <label for="email" class="form-label mt-4">Email address*</label>
+        <input type="email" class="form-control" id="email" 
+         aria-describedby="emailHelp" placeholder="Enter email" formControlName="email">
+         <app-validations [control]="newUser.get('email')" />
+           @if(newUser.controls['email'].errors?.['email']){
+          <p class="validations">Enter your e-mail correctly.</p>
+          } 
+      </div>
+        <div>
+          <label for="password" class="form-label mt-4">Password*</label>
+          <input type="password" class="form-control" id="password" 
+            placeholder="Password" autocomplete="off" formControlName="password">
+          <app-validations [control]="newUser.get('password')" />
+           @if(newUser.controls['password'].errors?.['minlength']){
+            <p class="validations">Minimum 5 char.</p>
+            } 
+        </div>
+      <div>
+        <label for="username" class="form-label mt-4">Username*</label>
+        <input type="username" class="form-control" id="username" 
+          placeholder="Username" autocomplete="off" formControlName="username">
+          <app-validations [control]="newUser.get('username')" />           
+      </div>
+      <div class="photos">
+        <label for="blogPhoto" class="form-label mt-4 me-3">Add profile photo:</label>
+        <button class="btn btn-secondary btn-sm me-3" type="button" (click)="fileInput.click()">Pick the file</button>
+              <input 
+              style="display: none;"
+              #fileInput
+              class="form-control" 
+              type="file"
+              accept="image/*" 
+              (change)="onFileSelected($event)" 
+              multiple id="blogPhoto">
+        @if(userPhoto()) {
+          <img [src]="userPhoto()" alt="" height="100" class="profile-photo mt-2">
+      }
+      </div>
+  </form>
+</div>
+<div class="modal-footer d-flex justify-content-between">
+  <button type="button" class="btn btn-primary me-2" (click)="registerUser()">Register</button>
+  <button type="button" class="btn btn-secondary" (click)="cancelRegistration()">Cancel</button>
+</div>
+
+          
+
+          
+
+
+
+      
+
+
+     
+     
