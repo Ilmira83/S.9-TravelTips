@@ -32,13 +32,27 @@ export class PlanEditorComponent {
   dailyPlanID = this.dailyPlanService.dailyPlanID;
 
   addPlan() {
-    const plan = this.editForm.onSubmit();
+    const planData = this.editForm.onSubmit();
     if (!this.isFormValid()) {
       this.toastrservice.warning('Please complete all the fields with asteriscs(*).',
         'Warn', { closeButton: true, positionClass: 'toast-bottom-right' } );
       return;
     }
-    if (!plan) return;
+    if (!planData) return;
+    const plan: Post = {
+      userID: this.userId(),
+      title: planData.title,
+      destination: planData.destination,
+      country: planData.country,
+      city: planData.city,
+      description: planData.description,
+      travelers: planData.travelers,
+      costs: planData.costs,
+      month: planData.month,
+      year: planData.year,
+      nDays: planData.nDays,
+    };
+
     this.planService.addPlan(plan).subscribe({
       next: (plan) => {
         this.planID.set(plan.id!);
@@ -61,14 +75,22 @@ export class PlanEditorComponent {
   getPlanByID(id: number) {
    this.planService.getPlanByID(id).subscribe({
     next: (plan: Post) => {
+      this.editForm.get('country')?.setValue(plan.country);
+         const fakeEvent = {
+        target: { value: plan.country }
+      } as unknown as Event; 
+      
+      this.editForm.onCountryChange(fakeEvent);
+      setTimeout(() => {
       this.editForm.setValue(plan);
-    },
-  });
+    }, 100 );}
+  });   
   }
 
   updatePlan() {
     const planData = this.editForm.onSubmit();
     if (!planData) return;
+
     this.planService.updatePlan(this.planID()!, planData).subscribe({
       next: () => {
         this.updateDailyPlansByPlanID();
@@ -83,13 +105,14 @@ export class PlanEditorComponent {
 
   addDailyPlan() {
     const dailyPlanData = this.dailyPlanForm.onSubmitDailyPlan();
-    if (!dailyPlanData || dailyPlanData.length === 0) return;
+    if (!dailyPlanData || dailyPlanData.length === 0) return false;
 
     this.dailyPlanService.addDailyPlan(dailyPlanData).subscribe({
       next: () => {
         this.dailyPlanService.dailyPlanList.reload();
       },
     });
+    return true;
   }
 
   getDailyPlanByPlanID() {
