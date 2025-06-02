@@ -24,7 +24,9 @@ export class ProfileComponent {
   router = inject(Router);
   infoMess = inject(InfoalertService);
 
-  userId = this.authService.userId;  
+  userId = this.authService.userId;
+  blogID = this.blogsService.blogID; 
+  planID = this.planService.planID;
   
   userList = computed(() => this.userService.userList.value() ?? [] as User[]);
   currentUser = computed(() => this.userList()!.find((authUser: User) => authUser.fbUID === this.userId()));

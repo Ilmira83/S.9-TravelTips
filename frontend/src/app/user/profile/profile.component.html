@@ -85,13 +85,12 @@
       [queryParams]="{ mode: 'blog' }"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"
-      >Add new blog</button>
+      (click)="blogID.set(0)">Add new blog</button>
     </div> 
   <!-- Plans list -->
    <div class="blog-list px-md-5">
     <div class="title text text-center"
       routerLink="/app-plan-list"
-      [queryParams]="{ mode: 'plan' }"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"><h4>Recent plans</h4></div>
       <hr class="profile-divider">   
@@ -124,7 +123,7 @@
       [queryParams]="{ mode: 'plan' }"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"
-      >Add new plan</button>
+      (click)="planID.set(0)">Add new plan</button>
   </div>
 </div>
  </div>
