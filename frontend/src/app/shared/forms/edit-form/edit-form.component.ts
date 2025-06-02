@@ -74,29 +74,9 @@ export class EditFormComponent {
     return this.editForm.get(key);
   }
 
-  get imagesForm() {
-    return this.editForm.get('image') as FormArray;
-  }
-
-  onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (!file) return;
-
-    this.editForm.patchValue({ image: file });
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      this.imageData.set(reader.result as string) 
-    };
-    reader.readAsDataURL(file);
-  }
-
   setValue(value: Partial<Post>) {
     this.editForm.patchValue(value);
   }
-
-
 
   resetForm() {
     this.editForm.reset();
