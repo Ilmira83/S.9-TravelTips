@@ -9,8 +9,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 })
 export class ImageLoadFormComponent {
   imageDataChanged = output<string>();
-  imageData: string = '';
-
+  imageData:string = ''; 
 
   imageForm: FormGroup;
   
@@ -32,7 +31,6 @@ export class ImageLoadFormComponent {
   get imagesForm() {
     return this.imageForm.get('image');
   }
-
 
   onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
