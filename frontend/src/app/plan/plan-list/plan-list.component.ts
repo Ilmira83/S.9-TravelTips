@@ -6,6 +6,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Plan } from '../../shared/models/plan';
 import { PlanApiService } from '../../shared/services/APIs/plan-api.service';
 import { DailyPlanApiService } from '../../shared/services/APIs/dailyPlan-api.service';
+import { InfoalertService } from '../../shared/services/infoalert.service';
 
 @Component({
   selector: 'app-plan-list',
@@ -19,6 +20,7 @@ export class PlanListComponent {
   router = inject(Router);
   planService = inject(PlanApiService);
   dailyPlanService = inject(DailyPlanApiService);
+  infoMess = inject(InfoalertService);
 
   userId = this.authService.userId;  
   search = this.blogsUtils.searchCriteria;
@@ -44,14 +46,18 @@ export class PlanListComponent {
 
   getPlanByID(id:number){
     this.planID.set(id);
-    this.router.navigate(['/app-plan-editor'])
+    this.router.navigate(['/app-plan-editor'],  { queryParams: { mode: 'blog'} })
   }
 
   deletePlan(id:number){
-    this.planID.set(id)
-    this.planService.deletePlan(id).subscribe(()=> 
-    this.planService.plansList.reload())
-    this.deleteDailyPlan()
+    this.infoMess.deleteConfirmation();
+    if(this.infoMess.deleteConfirm()){
+      this.planID.set(id)
+      this.planService.deletePlan(id).subscribe(()=> 
+      this.planService.plansList.reload())
+      this.deleteDailyPlan();
+      this.closeDeleteConfirmation()
+    }
   }
 
   deleteDailyPlan(){
@@ -61,7 +67,11 @@ export class PlanListComponent {
     this.dailyPlanService.dailyPlanList.reload())  
     }); 
   }
+  openDeleteConfirmation(){
+    this.infoMess.openInfo.set(true);
+  }
 
+  closeDeleteConfirmation=()=> this.infoMess.openInfo.set(false)
 
 
 

@@ -54,10 +54,26 @@
           (click)="getPlanByID(plan.id!)"
           >Edit</button>
           <button type="button" class="btn btn-secondary btn-sm ms-2"
-          (click)="deletePlan(plan.id!)"
+          (click)="openDeleteConfirmation()"
           >Delete</button>
         </th>
       </tr>
+   @if( this.infoMess.openInfo()){
+    <section class="modal" id="modal">
+      <div class="modal-content">
+        <h1 class="fs-5 text-center">
+          Please confirm the delete action.
+          <div class="delete-confirm d-flex justify-content-center mt-3">
+          <button class="btn btn-primary btn-sm mt-2 my-sm-0 me-2" type="button"
+            (click)="deletePlan(plan.id!)"
+          >Confirm</button>
+          <button class="btn btn-secondary btn-sm mt-2 my-sm-0" type="button"
+            (click)="closeDeleteConfirmation()"
+          >Cancel</button>        
+          </div>
+        </h1>
+      </div>
+    </section>}
     } 
       </tbody>
   </table>
