@@ -38,7 +38,7 @@ describe('UsermenuComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(UsermenuComponent);
-    component = fixture.componentInstance;
+    component = fixture.componentInstance; 
     fixture.detectChanges();
 
     harness = await RouterTestingHarness.create();
@@ -89,4 +89,4 @@ describe('UsermenuComponent', () => {
   }));
 
 
-});
+}); 
