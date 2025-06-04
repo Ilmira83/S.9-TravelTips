@@ -31,7 +31,7 @@ export class EditFormComponent {
   constructor(private fb: FormBuilder) {
     this.editForm = this.fb.group({
       title: new FormControl('', [Validators.required]),
-      destination: new FormControl('', [Validators.required]),
+/*       destination: new FormControl('', [Validators.required]), */
       country: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required]),
       travelers: new FormControl(null, [Validators.required]),

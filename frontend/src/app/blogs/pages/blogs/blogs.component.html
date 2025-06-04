@@ -16,7 +16,7 @@
   >
     Sort by date <span [innerHTML]="isDateAsc ? '↑' : '↓'"></span>
   </button>
-  <button
+ <!--  <button
     class="dropdown-center dropdown-toggle btn btn-secondary my-2 me-2 my-sm-0"
     data-bs-toggle="dropdown"
     type="button"
@@ -37,8 +37,8 @@
         >Show all</a
       >
     </li>
-    } }
-  </ul>
+    } } 
+  </ul>-->
 </div>
 <div class="d-flex justify-content-center mt-5">
   <h4 class="d-flex align-items-end text-primary">Blog posts</h4>
@@ -58,8 +58,8 @@
       <h5 class="card-title">{{ user.username }}</h5>
       } }
       <div class="card-destination d-flex">
-        <h6 class="card-title me-2 fw-bold">{{ blog.destination }}</h6>
-        <h6 class="card-title">{{ blog.country }}, {{ blog.city }}</h6>
+        <h6 class="card-title me-2 fw-bold">{{ blog.country }},</h6>
+        <h6 class="card-title"> {{ blog.city }}</h6>
       </div>
       <div class="card-period d-flex gap-2">
         <h6 class="card-title">{{ blog.month }},{{ blog.year }}</h6>
@@ -78,7 +78,7 @@
       </button>
     </div>
   </div>
-  } } @else if (blogsUtils.filetredBlogList().length !== 0 && (search() || blogsUtils.destinations)){
+  } } @else if (blogsUtils.filetredBlogList().length !== 0 && (search())){
   <div class="error ms-3 mt-3">
     <h4>No blogs with this criteria.</h4>
   </div>

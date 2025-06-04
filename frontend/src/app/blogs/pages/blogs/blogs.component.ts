@@ -29,7 +29,7 @@ export class BlogsComponent {
   userList = computed(() => this.userService.userList.value() ?? [] as User[]);
 
   filetredByDestination(destination:string){
-    this.blogsUtils.selectedDestination.set(destination);
+/*     this.blogsUtils.selectedDestination.set(destination); */
     this.blogsUtils.filetredBlogList()
   }
   dateSorted =()=> {

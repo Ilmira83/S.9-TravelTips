@@ -20,9 +20,9 @@ describe('UserApiService', () => {
   it('should return expected users (HttpClient called once)', () => {
     const expectedUsers: User[] | undefined = service.userList.value();
      expect(expectedUsers === undefined || Array.isArray(expectedUsers)).toBeTrue();
-  });
+  }); 
 
 
 
 
-});
+ }); 

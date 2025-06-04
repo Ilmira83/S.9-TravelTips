@@ -6,7 +6,7 @@ import { AbstractControl } from '@angular/forms';
   imports: [],
   template: `
       @if (control?.touched && control?.errors?.['required']) {
-      <p class="validations text-red">This field is required.</p>
+      <p class="validations text-red" test-id="validation-error">This field is required.</p>
     
       }`,
   styles: `  .validation-text{color: red;

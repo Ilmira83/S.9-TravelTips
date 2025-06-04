@@ -24,4 +24,4 @@ describe('InfoalertService', () => {
   it('should have default daily plan message', () => {
     expect(service.messDailyPlan).toContain('Complete your travel plan by adding a short description');
   });
-});
+}); 

@@ -54,6 +54,7 @@
       routerLink="/app-blogs-list"
       [queryParams]="{ mode: 'blog' }"
       routerLinkActive="active"
+      test-id= "my-router-link"
       ariaCurrentWhenActive="page"><h4>Recent blogs</h4></div>
       <hr class="profile-divider">  
     @if(userBloglist().length){
@@ -84,6 +85,7 @@
       routerLink="/app-blog-editor"
       [queryParams]="{ mode: 'blog' }"
       routerLinkActive="active"
+      test-id= "my-router-link"
       ariaCurrentWhenActive="page"
       (click)="blogID.set(0)">Add new blog</button>
     </div> 
@@ -92,6 +94,7 @@
     <div class="title text text-center"
       routerLink="/app-plan-list"
       routerLinkActive="active"
+      test-id= "my-router-link"
       ariaCurrentWhenActive="page"><h4>Recent plans</h4></div>
       <hr class="profile-divider">   
     @if(userPlanlist().length){
@@ -122,6 +125,7 @@
       routerLink="/app-plan-editor"
       [queryParams]="{ mode: 'plan' }"
       routerLinkActive="active"
+      test-id= "my-router-link"
       ariaCurrentWhenActive="page"
       (click)="planID.set(0)">Add new plan</button>
   </div>

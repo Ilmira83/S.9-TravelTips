@@ -11,7 +11,7 @@
             (ngModelChange)="blogsUtils.searchCriteria.set($event)" 
             name="search">
         </form>
-        <button class="btn btn-secondary dropdown-toggle btn-sm my-2 me-2 my-sm-0" type="button" data-bs-toggle="dropdown"
+<!--         <button class="btn btn-secondary dropdown-toggle btn-sm my-2 me-2 my-sm-0" type="button" data-bs-toggle="dropdown"
         >Filter</button>
         <ul class="dropdown-menu">
       @for(destination of blogsUtils.destinations; track destination){   
@@ -21,7 +21,7 @@
           <li><a class="dropdown-item" (click)=" this.blogsUtils.selectedDestination.set(destination)">Show all</a></li>
         }           
       }
-    </ul>
+    </ul> -->
         <button class="btn btn-primary btn-sm my-2 my-sm-0" type="button"
           routerLink="/app-plan-editor"
           [queryParams]="{ mode: 'plan' }"

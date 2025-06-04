@@ -2,7 +2,7 @@ export interface Plan {
   id?: number,
   userID?: string | null,
   title: string,
-  destination: string,
+  destination?: string,
   country: string,
   city: string,
   description: string,
