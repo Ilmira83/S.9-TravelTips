@@ -1,13 +1,13 @@
-/* import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { RouterTestingHarness} from '@angular/router/testing';
 import { ProfileComponent } from './profile.component';
 import { ToastrModule } from 'ngx-toastr';
-import { provideRouter, RouterLink } from '@angular/router';
+import { provideRouter, Router, RouterLink } from '@angular/router';
 import { BlogsListComponent } from '../../blogs/blogs-list/blogs-list.component';
 import { By } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { signal } from '@angular/core';
+import { computed, signal } from '@angular/core';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { User } from '../../shared/models/user';
 
@@ -26,55 +26,66 @@ describe('ProfileComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ProfileComponent, ToastrModule.forRoot() ],
       providers: [provideHttpClientTesting(), provideHttpClient() , { provide: AuthService, useValue: mockAuthService },
-         provideRouter([
+        provideRouter([
           {
             path: '', component: ProfileComponent
           },
-          {
-            path:'app-blogs-list', component: BlogsListComponent
+          { 
+            path: 'app-blogs-list', component: BlogsListComponent 
           }
-        ])
+        ]) 
     ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(ProfileComponent);
     profilepage = fixture.debugElement.nativeElement;
-    fixture.detectChanges();
-
-    harness = await RouterTestingHarness.create();
-    component = await harness.navigateByUrl('/', ProfileComponent)
+    component = fixture.componentInstance;
+  
 
 
+component['userList'] = signal<User[]>([
+  { id: 1, fbUID: 'testFBUID', username: 'Test User', userPhoto: 'test.jpg' }
+]);
+component['userId'] = signal('testFBUID');
+component['currentUser'] = computed(() => component['userList']().find(u => u.fbUID === component['userId']()));
 
-    component.userList   = signal<User[]>([
-      {
-        id: 1,
-        fbUID: 'testFBUID',
-        username: 'Test User', 
-        userPhoto: 'test.jpg' 
-      }      
-        ]
-    ); 
 
 
   fixture.detectChanges(); 
   await fixture.whenStable(); 
+  
+    harness = await RouterTestingHarness.create();
+    component = await harness.navigateByUrl('/', ProfileComponent)
 
-  }); */
+  }); 
 
-/*   it('should have correct site-navigation items', (() => {  */
+  it('should have correct site-navigation items', (() => {  
 
-/*   const linkElements  = fixture.debugElement.queryAll(By.css('[test-id="my-router-link"]'));
-  const routerLinks  = linkElements .map(it => it.attributes['ng-reflect-router-link']);
+  const linkElements  = fixture.debugElement.queryAll(By.css('[test-id="my-router-link"]'));
+ 
+  expect(linkElements.length).toBe(6); 
 
+  }));
+  it('should have correct routerlink items', (() => {  
 
- expect(routerLinks).toContain('/app-blogs-list'); */
-/*   expect(routerLinks.length).toBe(2); */
-/*   expect(routerLinks[0].routerLink).toBe("/app-blogs-list"); */
+  const linkElements  = fixture.debugElement.queryAll(By.css('[test-id="my-router-link"]'));
+  const routerLinks  = linkElements .map(it => it.attributes['ng-reflect-router-link']); 
 
+  expect(routerLinks[0]).toContain("/app-blogs-list"); 
+  expect(routerLinks[1]).toContain("/app-plan-list"); 
 
-/*   }));
-}); */
+  }));
+  it('when click My Blogs link, should navigate to blog-list page', waitForAsync(async() => {
+
+    const linkItem = harness.routeDebugElement?.query(By.css('[test-id="my-router-link"]'));
+    linkItem!.triggerEventHandler('click', {button: 0});
+  
+    await fixture.whenStable();
+
+    expect(TestBed.inject(Router).url.startsWith('/app-blogs-list')).toBeTrue()
+  }));
+
+}); 
 
 
