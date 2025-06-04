@@ -41,7 +41,7 @@ export class PlanDetailsComponent {
         id: response.id,
         userID:response.userID,
         title: response.title,
-        destination: response.destination,
+/*         destination: response.destination, */
         country: response.country,
         city: response.city,
         description: response.description,
