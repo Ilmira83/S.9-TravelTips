@@ -18,7 +18,7 @@ describe('EditFormComponent', () => {
       providers:[provideHttpClientTesting(), provideHttpClient(), {
           provide: ActivatedRoute,
           useValue: {
-            queryParams: of({}) // заглушка для ActivatedRoute
+            queryParams: of({}) 
           }
         }]
     })
