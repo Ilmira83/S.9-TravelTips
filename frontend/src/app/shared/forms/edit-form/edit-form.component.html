@@ -11,13 +11,12 @@
       class="form-control form-control-lg"
       type="text"
       id="title"
-      formControlName="title"
-      test-id="title"
+      formControlName="title"  
     />
     <app-validations [control]="editForm.get('title')" test-id="validation-title"/>
   </div>
   <div class="selects">
-    <div class="destination flex-grow-1">
+<!--     <div class="destination flex-grow-1">
       <label for="destinationSelect" class="col-form-label-sm mt-4"
         >Select continent*</label
       >
@@ -31,7 +30,7 @@
         }
       </select>
       <app-validations [control]="editForm.get('destination')" />
-    </div>
+    </div> -->
     <div class="date flex-grow-1">
       <label for="dateSelect" class="col-form-label-sm mt-4"
         >Select date*</label
