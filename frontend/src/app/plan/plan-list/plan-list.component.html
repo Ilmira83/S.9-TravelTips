@@ -46,14 +46,14 @@
     </thead>
     <tbody>  
       @for(plan of userPlanlist(); track plan.id){
-      <tr class="table-primary">
+      <tr class="table-secondary">
         <th class="ps-3" scope="row" (click)="navigateToPlanDetails(plan.id!)">{{plan.title}}</th>
         <th scope="row" (click)="navigateToPlanDetails(plan.id!)">{{plan.month}}, {{plan.year}}</th>
         <th class="modify_buttons text-center">
-          <button type="button" class="btn btn-outline-light btn-sm"
+          <button type="button" class="btn btn-dark btn-sm"
           (click)="getPlanByID(plan.id!)"
           >Edit</button>
-          <button type="button" class="btn btn-secondary btn-sm ms-2"
+          <button type="button" class="btn btn-primary btn-sm ms-2"
           (click)="openDeleteConfirmation()"
           >Delete</button>
         </th>
